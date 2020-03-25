@@ -18,6 +18,6 @@ before_script:
  - npm install react-bootstrap
  - npm install --save mdbreact
  - npm install axios
- #- yarn
+ - yarn
 
 script: yarn start
