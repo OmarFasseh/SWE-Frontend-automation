@@ -6,6 +6,8 @@ node_js:
 # - mongodb
   
 before_script: 
- - yarn
+ - npm install react-bootstrap
+ - npm install --save mdbreact
+ - npm install axios
 
 script: yarn start
