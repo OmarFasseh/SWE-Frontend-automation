@@ -1,7 +1,7 @@
 sudo: required
 language: node_js
 node_js:
-  - node
+  - 12
 #services:
 # - mongodb
   
@@ -21,3 +21,5 @@ node_js:
 # - yarn
 
 #script: yarn start
+ script:
+    - npm run start
