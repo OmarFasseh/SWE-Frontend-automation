@@ -20,4 +20,4 @@ node_js: 12
 # - yarn
 
 #script: yarn start
- script: npm run start
+script: npm run start
