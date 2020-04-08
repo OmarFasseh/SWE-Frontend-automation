@@ -1,6 +1,13 @@
-sudo: required
 language: node_js
-node_js: 12
+node_js:
+  - "stable"
+cache:
+  directories:
+  - node_modules
+script:
+  - npm install
+  - npm test
+  - npm run build
 #services:
 # - mongodb
   
@@ -20,4 +27,3 @@ node_js: 12
 # - yarn
 
 #script: yarn start
-script: npm run start
