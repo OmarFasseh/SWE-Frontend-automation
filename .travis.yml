@@ -5,8 +5,9 @@ cache:
   directories:
   - node_modules
 script:
+  - npx npm-force-resolutions
   - npm install
-  - yarn
+  #- yarn
   #- npm test
   - yarn build
 #services:
