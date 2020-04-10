@@ -6,7 +6,7 @@ cache:
   - node_modules
 script:
   - npm install
-  #- yarn
+  - yarn
   #- npm test
   - yarn build
 #services:
