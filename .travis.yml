@@ -6,8 +6,8 @@ cache:
   - node_modules
 script:
   - npm install
-  - yarn
-  - npm test
+  #- yarn
+  #- npm test
   - yarn build
 #services:
 # - mongodb
