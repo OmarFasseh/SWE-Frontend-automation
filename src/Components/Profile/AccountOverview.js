@@ -2,7 +2,11 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import './Profile.css';
-
+/**
+ * Function that make the account overview page that view email and date of birth
+ * @class
+ * @param {JSON} props object that contains logged in person info
+ */
 function AccountOverview(props) {
 
     return(
@@ -21,13 +25,9 @@ function AccountOverview(props) {
 							<td>{props.info.dateOfBirth}</td>
 
 						  </tr>
-						  <tr>
-						    <th>Country</th>
-							<td>{props.info.country}</td>
-						  </tr>
 					    </table>
 			    	</div>
-                    <Link to="/editprofile"><button className="btn btn-outline-secondary account-overview-buttons">EDIT PROFILE</button></Link>
+                    <Link to="/edit-profile"><button className="btn btn-outline-secondary account-overview-buttons">EDIT PROFILE</button></Link>
 					<div className="plan">
 						<h3 className="yourplan">Your plan</h3>
 						<br></br>
@@ -39,7 +39,7 @@ function AccountOverview(props) {
 							<p className="playp f">Free</p>
 						</div>
 					</div>
-				<Link to="/premiumcode"><button className="btn btn-outline-secondary account-overview-buttons">JOIN PREMIUM</button></Link>
+				<Link to="/premium-code"><button className="btn btn-outline-secondary account-overview-buttons">JOIN PREMIUM</button></Link>
 		</div>
     
     )
