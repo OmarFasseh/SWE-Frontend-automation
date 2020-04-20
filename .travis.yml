@@ -4,9 +4,11 @@ node_js:
 cache:
   directories:
   - node_modules
-script:
+before_install:
   - npx npm-force-resolutions
+install:
   - npm install
+script:
   #- yarn
   #- npm test
   - yarn build
