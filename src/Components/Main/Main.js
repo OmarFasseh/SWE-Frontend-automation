@@ -17,7 +17,7 @@ function Main() {
             <div id="container">
               <div className="h-1">Music for everyone.</div>
               <div className="h-4">Millions of songs. No credit card needed.</div>
-               <Link to="/signup"> <button id="ob"className="my-spotify-button" >Get Spotify Free</button></Link>
+               <Link to="/signup"> <button id="ob"className="my-spotify-button" >Get DevOps Free</button></Link>
                
             </div>
          </section>     
