@@ -43,9 +43,7 @@ class PasswordReset extends Component {
                 {
                     this.setState({status: 'not-linked-email'});     
                 }  
-                }).catch(err =>{
-                    if(err.status===400 || err.status===401)
-                        this.setState({status: 'not-linked-email'});   
+                }).catch(err =>{  
                     alert(err)
                 })
         }
@@ -105,7 +103,7 @@ class PasswordReset extends Component {
                 :
                 (
             <div>
-                    <p>Enter your Spotify username, or the email address that you used to register. We'll send you an email with your username and a link to reset your password.</p>
+                    <p>Enter your Spotify email address that you used to register. We'll send you an email with a link to reset your password.</p>
                     <label>Email address</label>
                     <input  type="email" id="form-email" onChange={this.handleEmailChange} className="form-control mb-4"/>
                         {this.state.status==="empty-email"?

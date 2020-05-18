@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import DesktopNavbar from './DesktopNavbar'
 import MobileNavbar from './MobileNavbar'
 
+
 const exclusionArray = [
   '/login',
+  '/',
   '/signup',
   '/home',
   '/artist-webplayer',
@@ -62,12 +64,12 @@ class Navbar extends Component {
 
       }
     
-       /**
+      /**
      * Function choosing between desktop and mobile version navbar
      * 
      */
       updatePredicate() {
-        this.setState({ isDesktop: window.outerWidth > 900 });
+        this.setState({ isDesktop: window.outerWidth > 1000 });
       }
 
        /**
@@ -76,7 +78,7 @@ class Navbar extends Component {
      */
       updateVisibility() {
 
-        this.setState({ isVisible: exclusionArray.indexOf(window.location.pathname) < 0})
+        this.setState({ isVisible: exclusionArray.indexOf(window.location.pathname) < 0})  
         
       }
     
@@ -91,6 +93,9 @@ class Navbar extends Component {
             <div>
                 
                 {isDesktop?(
+                 
+                  
+                
                   <DesktopNavbar/>
                     ) : (
                   <MobileNavbar/>

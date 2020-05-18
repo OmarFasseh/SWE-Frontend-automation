@@ -15,6 +15,7 @@ import {Link,Redirect} from 'react-router-dom'
 class LogIn extends Component {
     static contextType=ConfigContext;
 
+
     constructor() {
         super()
         
@@ -31,8 +32,7 @@ class LogIn extends Component {
     }
 
     }
-
-      /**
+        /**
      * Function handling login request with Facebook
      * 
      */
@@ -59,7 +59,7 @@ class LogIn extends Component {
                             localStorage.setItem("loginType", "fb");
                             localStorage.setItem("userID", response.authResponse.userID);
                             this.setState({status: 'connected'});
-                            //window.location.reload(false);
+                            
                         }
                     }
                     else // Unsuccessful
@@ -71,12 +71,12 @@ class LogIn extends Component {
 
                         alert(err)
                     })
-                    //window.location.reload(false); 
+                    
               }
           }.bind(this), {scope: 'public_profile,email'});
     } 
 
-    /**
+     /**
      * Component Mount state Intialization
      * 
      */
@@ -92,8 +92,7 @@ class LogIn extends Component {
           this.setState({status:"not connected"})
        
     }
-
-    /**
+     /**
      * Function to check the Email textbox has valid email format
      * @param {string} Email - user email.
      */
@@ -120,8 +119,7 @@ class LogIn extends Component {
          return false;
         //return psw && psw.length >= 6
     }
-
-     /**
+      /**
      * Function handling login request with Email and Password
      * 
      */
@@ -140,7 +138,7 @@ class LogIn extends Component {
 
         if(is_email_valid && is_psw_valid)
         {
-            //console.log(this.context.baseURL+'/signIn');
+            
             axios.post(this.context.baseURL+'/signIn',
             {
             "email":memail,
@@ -156,7 +154,7 @@ class LogIn extends Component {
                         localStorage.setItem("token",res.data.token);
                         localStorage.setItem("loginType", "email");
                         this.setState({status: 'connected'});
-                       // window.location.reload(false);
+                       
                     }
                 }
                 else
@@ -169,21 +167,12 @@ class LogIn extends Component {
 
                  }
                 }).catch(err =>{
-//console.log(err)
-//console.log(err.response)
-                    if(err.response.status===401 || err.response.status===400) // Unsuccessful
-                {
-                   if(this.state.status!=="invalid")
-                    this.setState({status: 'invalid'});
-
-                    this.setState({invalid: true});
-                }else
                 alert(err)
                 })
         } 
     }
 
-    /**
+     /**
      * Function handling change in password textbox to the page's state
      * 
      */
@@ -199,7 +188,6 @@ class LogIn extends Component {
              user:userCopy 
             })
     }
-
 
     /**
      * Function handling change in email textbox to the page's state

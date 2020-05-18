@@ -4,7 +4,6 @@ import axios from 'axios'
 import { Link } from 'react-router-dom';
 import {ConfigContext} from '../../Context/ConfigContext'
 
-
 /**
  * Login index page Cards components class
  * @extends Component
@@ -17,10 +16,9 @@ class CardComponent extends Component {
     constructor() {
         super()
         this.state = {
-       /**Array of Albums of the artist
-        @memberof Playlists
-       * 
-       */
+            /**
+             *  @type {Array<Object>}
+             */
             playlists:[],
 
         }
