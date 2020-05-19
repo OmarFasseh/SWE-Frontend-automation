@@ -9,7 +9,7 @@ class ConfigContextProvider extends Component {
     /**baseURL of requests
      * @memberof ConfigContextProvider
      */
-    baseURL: "http://spotify.mocklab.io",
+    baseURL: "https://totallynotspotify.codes",
   };
 
   render() {
