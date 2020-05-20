@@ -188,7 +188,7 @@ class Overview extends Component {
 
     //console.log(this.state.numberOfLikesAndFollowrsLineDataYears);
     axios
-      .get("http://spotify.mocklab.io"+"/meArtist/numberOfLikesAndFollowers", {
+      .get(this.context.baseURL+"/meArtist/numberOfLikesAndFollowers", {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
         },
