@@ -39,6 +39,12 @@ import ProfileContextProvider from './Context/ProfileContext';
 import ConfigContextProvider from './Context/ConfigContext'
 import {ProtectedRoute} from './ProtectedRoute/ProtectedRoute'
 
+
+import Overview from './Components/Artist/OverviewPage/Overview'
+import ManageProfile from './Components/Artist/ManageProfile/ManageProfile'
+import EditTrack from './Components/Artist/EditTrackAndAlbum/EditTrack'
+import YourLibrary from './Components/WebPlayer/Bodies/YourLibrary/YourLibrary'
+
 function App() {
 
   return (
@@ -78,6 +84,8 @@ function App() {
         <Route path="/artist-webplayer" exact component={ArtistWebPlayer} />
         <Route path="/playlist-webplayer" exact component={PlaylistWebPlayer} />
 
+        <Route path="/collection"exact component={YourLibrary}/>
+
         {/*Protected pages */}
         <ProtectedRoute path="/edit-profile" component={EditProfile}/>
         <ProtectedRoute path="/notification-settings" component={NotificationsSettings}/>
@@ -87,7 +95,14 @@ function App() {
         <ProtectedRoute path="/artist/track-upload" exact component={TrackUpload}/>
         <ProtectedRoute path="/artist/create-album" exact component={CreateAlbum}/>
         <ProtectedRoute path="/artist/album-page" exact component={AlbumPage}/>
+        
+        <ProtectedRoute path="/artist/manage-profile" exact component={ManageProfile}/>
+        <ProtectedRoute path="/artist/overview" exact component={Overview}/>
+        <ProtectedRoute path="/artist/edit-track" exact component={EditTrack}/>
 
+
+       
+       
         <Route path="/" component={NotFound}/>
       </Switch>
       <Footer/>

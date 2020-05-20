@@ -5,13 +5,13 @@ import MobileNavbar from './MobileNavbar'
 
 const exclusionArray = [
   '/login',
-  '/',
   '/signup',
   '/home',
   '/artist-webplayer',
   '/webplayer/album',
   '/artist/album-page',
-  '/playlist-webplayer'
+  '/playlist-webplayer',
+  '/collection'
 ]
 
 /**
