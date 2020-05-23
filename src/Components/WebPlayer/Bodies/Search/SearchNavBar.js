@@ -222,7 +222,26 @@ class SearchNavBar extends Component {
      */
       searchHandler(event){
         this.setState({text:event});
-        this.getTracks(event);
+       /* this.getTracks(event);*/
+       axios.get(this.context.baseURL+"/search?q="+event+"&limit=10")
+       .then(res => {
+           console.log("res status: ",res.status);
+       if(res.status===200)
+       {   
+           console.log("response of search (total):",res.data.data.results.total);
+           console.log("response of search (items):",res.data.data.results.items);
+           this.setState({tracks:res.data.data.results.items})
+           this.setState({notFound:res.data.data.results.total})
+       }
+       else{
+           this.setState({tracks:[]})
+           this.setState({notFound:0})
+           console.log("not found in gettracks:",this.state.notFound);
+           console.log("tracks in gettracks:",this.state.tracks);
+       }
+       }    
+       )
+
         console.log("tracks in search handler :",this.state.tracks);
         console.log("not found in search handler :",this.state.notFound);
         console.log("text inside search handler : ",event);
@@ -252,34 +271,17 @@ class SearchNavBar extends Component {
          * @type {Function}
          * @memberof SearchNavBar
          */
-        getTracks(typed){
+      /*  getTracks(typed){
             
             console.log("text before sending to search(in get tracks):",typed);
             console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
             /**this.context.baseURL+ */
-            axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
-                .then(res => {
-                    console.log("res status: ",res.status);
-                if(res.status===200)
-                {   
-                    console.log("response of search (total):",res.data.data.results.total);
-                    console.log("response of search (items):",res.data.data.results.items);
-                    this.setState({tracks:res.data.data.results.items})
-                    this.setState({notFound:res.data.data.results.total})
-                }
-                else{
-                    this.setState({tracks:[]})
-                    this.setState({notFound:0})
-                    console.log("not found in gettracks:",this.state.notFound);
-                    console.log("tracks in gettracks:",this.state.tracks);
-                }
-                }    
-                )
+           
                 
             
      
-            }
+         /*   }*/
             
         /**set currently playing song to an id 
          * @type {Function}
