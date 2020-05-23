@@ -226,25 +226,16 @@ class SearchNavBar extends Component {
        axios.get(this.context.baseURL+"/search?q="+event+"&limit=10")
        .then(res => {
            console.log("res status: ",res.status);
-       if(res.status===200)
-       {   
-           console.log("response of search (total):",res.data.data.results.total);
-           console.log("response of search (items):",res.data.data.results.items);
-           this.setState({tracks:res.data.data.results.items})
-           this.setState({notFound:res.data.data.results.total})
-       }
-       else{
-           this.setState({tracks:[]})
-           this.setState({notFound:0})
-           console.log("not found in gettracks:",this.state.notFound);
-           console.log("tracks in gettracks:",this.state.tracks);
-       }
+            if(res.status===200)
+            {   
+                console.log("response of search (total):",res.data.data.results.total);
+                console.log("response of search (items):",res.data.data.results.items);
+                this.setState({tracks:res.data.data.results.items})
+                this.setState({notFound:res.data.data.results.total})
+            }
        }    
        )
-
-        console.log("tracks in search handler :",this.state.tracks);
-        console.log("not found in search handler :",this.state.notFound);
-        console.log("text inside search handler : ",event);
+       .then(res=>{
         if(event==''){
             document.getElementById("search-searching").classList.add("hide");
             document.getElementById("search-not-searching").classList.remove("hide");
@@ -254,18 +245,19 @@ class SearchNavBar extends Component {
         else{
             this.componentDidMount();    
               /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-            if(this.state.notFound!=0){
+            if(res.data.data.results.total!=0){
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.remove("hide");
                 document.getElementById("search-not-found-searching").classList.add("hide");
                /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             }
-            else if(this.state.notFound==0){
+            else if(res.data.data.results.total==0){
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.add("hide");
                 document.getElementById("search-not-found-searching").classList.remove("hide");
             }
         }
+    })
       }
     /**get all tracks of the album 
          * @type {Function}
