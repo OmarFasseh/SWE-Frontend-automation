@@ -272,13 +272,10 @@ class SearchNavBar extends Component {
                     localStorage.removeItem("token");
                     localStorage.removeItem("userID");
                 }
-                else if(res.status===404){
-                    this.setState({tracks:[]})
-                    this.setState({notFound:'0'})
-                }
                 else{
-                    this.setState({tracks:res.data.data.results.items})
-                    this.setState({notFound:res.data.data.results.total})
+                    this.setState({tracks:[]})
+                    this.setState({notFound:0})
+                    console.log("not found in gettracks:",this.state.notFound);
                 }
                 }    
                 )
