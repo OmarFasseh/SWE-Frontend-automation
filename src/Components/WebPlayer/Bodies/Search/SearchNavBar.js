@@ -257,7 +257,6 @@ class SearchNavBar extends Component {
             /**this.context.baseURL+ */
             axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
                 .then(res => {
-                console.log("response of search:",res);
                 if(res.status===200)
                 {   
                     console.log("response of search (total):",res.data.data.results.total);
@@ -265,17 +264,11 @@ class SearchNavBar extends Component {
                     this.setState({tracks:res.data.data.results.items})
                     this.setState({notFound:res.data.data.results.total})
                 }
-                else if(res.status===401)
-                {
-                    localStorage.removeItem("loginType");
-                    localStorage.removeItem("isLoggedIn");
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("userID");
-                }
                 else{
                     this.setState({tracks:[]})
                     this.setState({notFound:0})
                     console.log("not found in gettracks:",this.state.notFound);
+                    console.log("not found in gettracks:",this.state.tracks);
                 }
                 }    
                 )
