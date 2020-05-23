@@ -251,6 +251,7 @@ class SearchNavBar extends Component {
         getTracks(){
             
             console.log("text before sending to search(in get tracks):",this.state.text);
+            console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
             axios.get(this.context.baseURL+"/search?q="+this.state.text+"&limit=5")
                 .then(res => {
