@@ -79,6 +79,7 @@ class SearchNavBar extends Component {
         }
         this.searchHandler = this.searchHandler.bind(this);
         this.getTracks=this.getTracks.bind(this);
+        this.searchHandler("");    
     }
     /**When the component mounts it sends a request to the backend to load the albums
      * @memberof SearchNavBar
@@ -178,7 +179,7 @@ class SearchNavBar extends Component {
                     alert(res.message);
                 }
             })
-            this.getTracks();    
+            
     }
 
     /**log out from spotify 
@@ -230,9 +231,10 @@ class SearchNavBar extends Component {
             
         }
         else{    
-            this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
+            this.getTracks();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             if(this.state.notFound!=0){
                 this.state.searchingstate=true;
+                this.componentDidMount();
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.remove("hide");
                 document.getElementById("search-not-found-searching").classList.add("hide");
@@ -262,9 +264,6 @@ class SearchNavBar extends Component {
                 if(res.status===200)
                 {   
                     console.log("response of search (total):",res.data.data.results.total);
-                    console.log("response of search (data):",res.data);
-                    console.log("response of search (data.data):",res.data.data);
-                    console.log("response of search (results):",res.data.data.results);
                     console.log("response of search (items):",res.data.data.results.items);
                     this.setState({tracks:res.data.data.results.items})
                     this.setState({notFound:res.data.data.results.total})
@@ -276,14 +275,8 @@ class SearchNavBar extends Component {
                     localStorage.removeItem("token");
                     localStorage.removeItem("userID");
                 }
-                else{
-                    alert(res.message);
-                }
                 }    
                 )
-                .catch(error => {
-                    alert(error.response.data.message);
-                })
                 
             
      
