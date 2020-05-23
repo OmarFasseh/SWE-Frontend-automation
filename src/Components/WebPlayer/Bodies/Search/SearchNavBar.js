@@ -261,9 +261,12 @@ class SearchNavBar extends Component {
                 console.log("response of search:",res);
                 if(res.status===200)
                 {   
+                    console.log("response of search (total):",res.data.data.results.total);
+                    console.log("response of search (data):",res.data);
+                    console.log("response of search (data.data):",res.data.data);
+                    console.log("response of search (results):",res.data.data.results);
                     console.log("response of search (items):",res.data.data.results.items);
                     this.setState({tracks:res.data.data.results.items})
-                    console.log("response of search (total):",res.data.data.results.total);
                     this.setState({notFound:res.data.data.results.total})
                 }
                 else if(res.status===401)
