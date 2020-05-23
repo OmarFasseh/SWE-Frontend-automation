@@ -78,7 +78,7 @@ class SearchNavBar extends Component {
             "notFound":"0"
         }
         this.searchHandler = this.searchHandler.bind(this);
-        this.getTracks=this.getTracks.bind(this);
+        /*this.getTracks=this.getTracks.bind(this);*/
             
     }
     /**When the component mounts it sends a request to the backend to load the albums
