@@ -78,7 +78,7 @@ class SearchNavBar extends Component {
             "notFound":"0"
         }
         this.searchHandler = this.searchHandler.bind(this);
-        /*this.getTracks=this.getTracks.bind(this);*/
+        this.getTracks=this.getTracks.bind(this);
             
     }
     /**When the component mounts it sends a request to the backend to load the albums
@@ -222,20 +222,10 @@ class SearchNavBar extends Component {
      */
       searchHandler(event){
         this.setState({text:event});
-       /* this.getTracks(event);*/
-       axios.get(this.context.baseURL+"/search?q="+event+"&limit=10")
-       .then(res => {
-           console.log("res status: ",res.status);
-            if(res.status===200)
-            {   
-                console.log("response of search (total):",res.data.data.results.total);
-                console.log("response of search (items):",res.data.data.results.items);
-                this.setState({tracks:res.data.data.results.items})
-                this.setState({notFound:res.data.data.results.total})
-            }
-       }    
-       )
-       .then(res=>{
+        this.getTracks(event);
+        console.log("tracks in search handler :",this.state.tracks);
+        console.log("not found in search handler :",this.state.notFound);
+        console.log("text inside search handler : ",event);
         if(event==''){
             document.getElementById("search-searching").classList.add("hide");
             document.getElementById("search-not-searching").classList.remove("hide");
@@ -245,35 +235,51 @@ class SearchNavBar extends Component {
         else{
             this.componentDidMount();    
               /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-            if(res.data.data.results.total!=0){
+            if(this.state.notFound!=0){
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.remove("hide");
                 document.getElementById("search-not-found-searching").classList.add("hide");
                /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             }
-            else if(res.data.data.results.total==0){
+            else if(this.state.notFound==0){
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.add("hide");
                 document.getElementById("search-not-found-searching").classList.remove("hide");
             }
         }
-    })
       }
     /**get all tracks of the album 
          * @type {Function}
          * @memberof SearchNavBar
          */
-      /*  getTracks(typed){
+        getTracks(typed){
             
             console.log("text before sending to search(in get tracks):",typed);
             console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
             /**this.context.baseURL+ */
-           
+            axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
+                .then(res => {
+                    console.log("res status: ",res.status);
+                if(res.status===200)
+                {   
+                    console.log("response of search (total):",res.data.data.results.total);
+                    console.log("response of search (items):",res.data.data.results.items);
+                    this.setState({tracks:res.data.data.results.items})
+                    this.setState({notFound:res.data.data.results.total})
+                }
+                else{
+                    this.setState({tracks:[]})
+                    this.setState({notFound:0})
+                    console.log("not found in gettracks:",this.state.notFound);
+                    console.log("tracks in gettracks:",this.state.tracks);
+                }
+                }    
+                )
                 
             
      
-         /*   }*/
+            }
             
         /**set currently playing song to an id 
          * @type {Function}
