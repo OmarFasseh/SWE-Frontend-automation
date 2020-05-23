@@ -79,7 +79,7 @@ class SearchNavBar extends Component {
         }
         this.searchHandler = this.searchHandler.bind(this);
         this.getTracks=this.getTracks.bind(this);
-        this.searchHandler("");    
+            
     }
     /**When the component mounts it sends a request to the backend to load the albums
      * @memberof SearchNavBar
@@ -179,7 +179,6 @@ class SearchNavBar extends Component {
                     alert(res.message);
                 }
             })
-            
     }
 
     /**log out from spotify 
@@ -220,8 +219,9 @@ class SearchNavBar extends Component {
      * @type {Function}
      * @memberof SearchNavBar
      */
-      searchHandler=(event)=>{
+      searchHandler(event){
         this.setState({text:event});
+        this.getTracks();
         console.log("text inside search handler : ",this.state.text);
         if(event==''){
             this.state.searchingstate=false;
@@ -231,10 +231,9 @@ class SearchNavBar extends Component {
             
         }
         else{    
-            this.getTracks();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
+              /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             if(this.state.notFound!=0){
                 this.state.searchingstate=true;
-                this.componentDidMount();
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.remove("hide");
                 document.getElementById("search-not-found-searching").classList.add("hide");
