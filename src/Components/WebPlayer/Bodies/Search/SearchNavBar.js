@@ -179,6 +179,7 @@ class SearchNavBar extends Component {
                     alert(res.message);
                 }
             })
+            this.searchHandler('');
     }
 
     /**log out from spotify 
@@ -270,6 +271,10 @@ class SearchNavBar extends Component {
                     localStorage.removeItem("isLoggedIn");
                     localStorage.removeItem("token");
                     localStorage.removeItem("userID");
+                }
+                else if(res.status===404){
+                    this.setState({tracks:[]})
+                    this.setState({notFound:'0'})
                 }
                 else{
                     this.setState({tracks:res.data.data.results.items})
