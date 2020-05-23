@@ -78,6 +78,7 @@ class SearchNavBar extends Component {
             "notFound":"0"
         }
         this.searchHandler = this.searchHandler.bind(this);
+        this.getTracks=this.getTracks.bind(this);
     }
     /**When the component mounts it sends a request to the backend to load the albums
      * @memberof SearchNavBar
@@ -247,14 +248,15 @@ class SearchNavBar extends Component {
       }
     /**get all tracks of the album 
          * @type {Function}
-         * @memberof ArtistWebPlayer
+         * @memberof SearchNavBar
          */
         getTracks(){
             
             console.log("text before sending to search(in get tracks):",this.state.text);
             console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
-            axios.get(this.context.baseURL+"/search?q="+this.state.text+"&limit=5")
+            /**this.context.baseURL+ */
+            axios.get("https://totallynotspotify.codes/api/search?q="+this.state.text+"&limit=5")
                 .then(res => {
                 console.log("response of search:",res);
                 if(res.status===200)
@@ -286,7 +288,7 @@ class SearchNavBar extends Component {
             
         /**set currently playing song to an id 
          * @type {Function}
-         * @memberof ArtistWebPlayer
+         * @memberof SearchNavBar
          */
         setPlayingSondId=(id)=>{
             if(this.state.playing_song_id===id){
