@@ -221,10 +221,9 @@ class SearchNavBar extends Component {
      */
       searchHandler(event){
         this.setState({text:event});
-        this.getTracks();
-        console.log("text inside search handler : ",this.state.text);
+        this.getTracks(event);
+        console.log("text inside search handler : ",event);
         if(event==''){
-            this.state.searchingstate=false;
             document.getElementById("search-searching").classList.add("hide");
             document.getElementById("search-not-searching").classList.remove("hide");
             document.getElementById("search-not-found-searching").classList.add("hide");
@@ -233,14 +232,12 @@ class SearchNavBar extends Component {
         else{    
               /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             if(this.state.notFound!=0){
-                this.state.searchingstate=true;
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.remove("hide");
                 document.getElementById("search-not-found-searching").classList.add("hide");
                /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             }
             else if(this.state.notFound==0){
-                this.state.searchingstate=false;
                 document.getElementById("search-not-searching").classList.add("hide");
                 document.getElementById("search-searching").classList.add("hide");
                 document.getElementById("search-not-found-searching").classList.remove("hide");
@@ -251,13 +248,13 @@ class SearchNavBar extends Component {
          * @type {Function}
          * @memberof SearchNavBar
          */
-        getTracks(){
+        getTracks(typed){
             
-            console.log("text before sending to search(in get tracks):",this.state.text);
+            console.log("text before sending to search(in get tracks):",typed);
             console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
             /**this.context.baseURL+ */
-            axios.get(this.context.baseURL+"/search?q="+this.state.text+"&limit=5")
+            axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
                 .then(res => {
                 console.log("response of search:",res);
                 if(res.status===200)
@@ -273,6 +270,10 @@ class SearchNavBar extends Component {
                     localStorage.removeItem("isLoggedIn");
                     localStorage.removeItem("token");
                     localStorage.removeItem("userID");
+                }
+                else{
+                    this.setState({tracks:res.data.data.results.items})
+                    this.setState({notFound:res.data.data.results.total})
                 }
                 }    
                 )
