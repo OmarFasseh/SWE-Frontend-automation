@@ -5,13 +5,14 @@ import '../NavBars.css';
 import './SearchNavBar.css';
 import axios from 'axios'
 
-import { ConfigContext } from '../../../../Context/ConfigContext'
+import {ConfigContext} from '../../../../Context/ConfigContext'
 import { ProfileContext } from '../../../../Context/ProfileContext'
 import TracksList from '../AlbumWebPlayer/TracksList';
 /** Class of Search navbar and display categories.
  * @extends Component
  */
 class SearchNavBar extends Component {
+    static contextType=ConfigContext;
     constructor(){
         super()
         this.state={
