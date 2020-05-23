@@ -256,15 +256,15 @@ class SearchNavBar extends Component {
             console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
             /**this.context.baseURL+ */
-            axios.get("https://totallynotspotify.codes/api/search?q="+this.state.text+"&limit=5")
+            axios.get(this.context.baseURL+"/search?q="+this.state.text+"&limit=5")
                 .then(res => {
                 console.log("response of search:",res);
                 if(res.status===200)
                 {   
-                    console.log("response of search (items):",res.data.data.items);
-                    this.setState({tracks:res.data.data.items})
-                    console.log("response of search (total):",res.data.data.total);
-                    this.setState({notFound:res.data.data.total})
+                    console.log("response of search (items):",res.data.data.results.items);
+                    this.setState({tracks:res.data.data.results.items})
+                    console.log("response of search (total):",res.data.data.results.total);
+                    this.setState({notFound:res.data.data.results.total})
                 }
                 else if(res.status===401)
                 {
