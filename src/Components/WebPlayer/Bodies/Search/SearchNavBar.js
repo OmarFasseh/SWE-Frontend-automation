@@ -223,6 +223,8 @@ class SearchNavBar extends Component {
       searchHandler(event){
         this.setState({text:event});
         this.getTracks(event);
+        console.log("tracks in search handler :",this.state.tracks);
+        console.log("not found in search handler :",this.state.notFound);
         console.log("text inside search handler : ",event);
         if(event==''){
             document.getElementById("search-searching").classList.add("hide");
@@ -230,9 +232,8 @@ class SearchNavBar extends Component {
             document.getElementById("search-not-found-searching").classList.add("hide");
             
         }
-        else{    
-            
-            console.log("not found in search handler :",this.state.tracks);
+        else{
+            this.componentDidMount();    
               /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
             if(this.state.notFound!=0){
                 document.getElementById("search-not-searching").classList.add("hide");
@@ -271,7 +272,7 @@ class SearchNavBar extends Component {
                     this.setState({tracks:[]})
                     this.setState({notFound:0})
                     console.log("not found in gettracks:",this.state.notFound);
-                    console.log("not found in gettracks:",this.state.tracks);
+                    console.log("tracks in gettracks:",this.state.tracks);
                 }
                 }    
                 )
