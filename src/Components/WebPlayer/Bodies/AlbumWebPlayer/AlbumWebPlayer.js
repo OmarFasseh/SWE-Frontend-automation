@@ -153,7 +153,8 @@ export class AlbumWebPlayer extends Component {
     */
     getAlbumDetails(){
         //this.context.baseURL+"/albums/"+this.state.myId
-        axios.get("http://spotify.mocklab.io/albums/12345",{
+        //http://spotify.mocklab.io/albums/12345
+        axios.get(this.context.baseURL+"/albums/"+this.state.myId,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
