@@ -83,6 +83,7 @@ element.classList.toggle("show");
 }
 
 nextpage=(pagenumber)=>{ 
+    this.setState({recents:[]})
     axios.get(this.context.baseURL +'/me/notifications?limit=4&page='+pagenumber,
         {
         headers:{'authorization':"Bearer "+localStorage.getItem('token')}

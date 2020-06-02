@@ -29,7 +29,7 @@ import './AddToPlaylist.css'
             */
             trackid:""
         }
-        this.handleClick= this.sendThis.handleClick(this)
+        this.handleClick= this.handleClick.bind(this)
     }
 
     componentDidMount()
