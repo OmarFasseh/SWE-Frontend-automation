@@ -29,7 +29,7 @@ import './AddToPlaylist.css'
             */
             trackid:""
         }
-        this.sendThis= this.sendThis.bind(this)
+        this.handleClick= this.sendThis.handleClick(this)
     }
 
     componentDidMount()
@@ -83,10 +83,10 @@ import './AddToPlaylist.css'
      * @param {String} id 
      * @returns {void}
      */
-    sendThis = (id) => {
-        axios.post(this.context.baseURL +'/playlists/:'+this.props.trackId+'/tracks' ,
+    handleClick = (id) => {
+        axios.post(this.context.baseURL +'/playlists/'+id+'/tracks' ,
         {
-        "id":id
+        "id":this.props.trackId
         },
     {
         headers: {
@@ -132,7 +132,7 @@ render() {
       <div className="row" >
                      <div className="playlist-items-wrapper">
                      {this.state.playlists.map(playlist => (
-                                        <div className="playlist-item-wrapper"  id={playlist.id} onClick={()=>{this.sendThis(playlist.id)}} >
+                                        <div className="playlist-item-wrapper"  id={playlist.id} onClick={() => this.handleClick(playlist.id)} >
                                             <div className="playlist-index-img-background"  >
                                                 <img src={playlist.imageUrl} alt="Playlist image" onError={e => { e.target.src ='https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg'}} >
                                                 <div className="playlist-icon-wrapper"   >
