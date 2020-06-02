@@ -29,7 +29,7 @@ constructor(){
          * Current Paging Number that I am in now 
          * @type {Number}
          */
-        currentpage:1,
+        currentPage:1,
 
     }
 }
@@ -114,6 +114,7 @@ nextpage=(pagenumber)=>{
                        */
                    image:recents.data.images[0]
                   })),
+                  currentPage:pagenumber,
                  totalResults: res.data.data.results.total
               })
           }
@@ -163,7 +164,7 @@ render(){
 				</div>
 			</div>
         ))}
-        {this.state.totalResults>4? <Pagination pages={numberPages} nextpage={this.nextpage} currentPage={this.state.currentpage}/> : ''}
+        {this.state.totalResults>4? <Pagination pages={numberPages} nextpage={this.nextpage} currentPage={this.state.currentPage}/> : ''}
            {/* {console.log(this.state.currentpage)}
         {console.log(numberPages)} */}
             </div>
