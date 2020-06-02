@@ -136,11 +136,8 @@ render() {
                                             <div className="playlist-index-img-background"  >
                                                 <img src={playlist.imageUrl} alt="Playlist image"
                                                  onError={e => { 
-                                                    e.target.src ='https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX38758453.jpg';}}>
-                                                <div className="playlist-icon-wrapper"   >
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                                </div>
-                                                </img>
+                                                    e.target.src ='https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX38758453.jpg';}}>  </img>
+                                               
                                                 <div className="playlist-img-text-wrapper" >               
                                                     <div className="playlist-subtitle"  >
                                                         <div className="my-playlist-playlist-info">
