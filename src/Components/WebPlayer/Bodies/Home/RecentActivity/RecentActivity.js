@@ -66,65 +66,17 @@ componentDidMount(){
                          * link to image of the notification item
                          * @type {link}
                          */
-                     image:recents.images[0]
+                     image:recents.data.images[0]
                     })),
                    totalResults: res.data.data.results.total
                 })
-                console.log("one dataa ")
             }
                 else if(res.status===401){
                     responseHandler(res);
                 }
             })  
             .catch(res=>{
-                console.log(res); 
-                axios.get(this.context.baseURL +'/me/notifications',
-                {
-                   headers:{'authorization':"Bearer "+localStorage.getItem('token')},
-                   query:{
-                       limit:6,
-                   }
-                   }
-                ) 
-                  .then(res => {
-                      console.log(res)
-                    if (res.status===200)
-                    {
-                        console.log("data wa7da" )
-                            this.setState({
-                                recents: res.data.results.items.map( recents => ({
-                                    /**
-                                     * @type {string}
-                                     */
-                                  id:recents.data.id,
-                                    /**
-                                     * Time of the activity 
-                                     * @type {time}
-                                     */
-                                   time:recents.time,
-                                    /**
-                                     * recent activity description 
-                                     */
-                                  description: recents.notification.body,
-                                    /**
-                                     * link to image of the notification item
-                                     * @type {link}
-                                     */
-                                 image:recents.images[0]
-                                })),
-                               totalResults: res.data.results.total
-                            })
-                            console.log("one dataa ")
-                        }
-                            else if(res.status===401){
-                                responseHandler(res);
-                            }
-                        })  
-                        .catch(res=>{
-                            console.log(res);} 
-                        )
-            
-                        })
+                console.log(res); }) 
 
 }
 toggledropdown=()=> {
@@ -137,7 +89,7 @@ nextpage=(pagenumber)=>{
         {
         headers:{'authorization':"Bearer "+localStorage.getItem('token')},
         query:{
-            limit:6,
+            limit:4,
             page:this.state.pagenumber,
         }
         }
@@ -168,7 +120,7 @@ nextpage=(pagenumber)=>{
              */
             image:recents.images[0]
         })),
-        totalResults: res.total,
+        totalResults: res.data.data.results.total,
         currentpage:pagenumber,
     })
 }
