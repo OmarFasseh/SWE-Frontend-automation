@@ -12,18 +12,18 @@
     width: fit-content;
   }
 
-  .playlist-icon-wrapper {
+  /* .playlist-icon-wrapper {
     color: transparent;
     cursor: pointer;
     text-transform: uppercase;
     outline: none !important;
-  }
-  .playlist-index-img-background:hover .playlist-icon-wrapper{
+  } */
+  /* .playlist-index-img-background:hover .playlist-icon-wrapper{
     color : white;
     transition: 1s;
     transition: all 0.2s ease 0s;
 
-  }
+  } */
   
   .playlist-img-text-wrapper{
     display: block;

@@ -132,14 +132,12 @@ render() {
       <div className="row" >
                      <div className="playlist-items-wrapper">
                      {this.state.playlists.map(playlist => (
-                                        <div className="playlist-item-wrapper"  id={playlist.id} onClick={() => this.handleClick(playlist.id)} >
-                                            <div className="playlist-index-img-background"  >
-                                                <img src={playlist.imageUrl} alt="Playlist image"
-                                                 onError={e => { 
-                                                    e.target.src ='https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX38758453.jpg';}}> </img>
-                                                {/* <div className="playlist-icon-wrapper"   >
-                                                <i class="fa fa-plus" aria-hidden="true"></i>
-                                                </div> */}
+                                        <div className="playlist-item-wrapper"  id={playlist.id}  >
+                                            <div className="playlist-index-img-background"  onClick={() => this.handleClick(playlist.id)}>
+                                               
+                                               <img src={playlist.imageUrl} alt="playlist-pic"
+                    onError={e => {e.target.src = 'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX38758453.jpg';}}></img>
+                                               
                                                
                                                 <div className="playlist-img-text-wrapper" >               
                                                     <div className="playlist-subtitle"  >
