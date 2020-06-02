@@ -99,10 +99,11 @@ const TrackUpload = (props) => {
     const formData = new FormData();
     formData.append("name", trackName);
     formData.append("trackAudio", file);
-    try {
+    try { 
+      //props.location.state.myId
       console.log(props.location.state.myId);
       const res = await axios.post(
-        url.baseURL + "/me/albums/" + props.location.state.myId + "/tracks",
+        url.baseURL + "/me/albums/5ec84430fcf468e8807fb647/tracks",
         formData,
         {
           headers: {
