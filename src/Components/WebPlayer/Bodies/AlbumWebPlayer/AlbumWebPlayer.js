@@ -140,9 +140,10 @@ export class AlbumWebPlayer extends Component {
     }
 
     componentDidMount(){
-
+      
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
+        console.log(this.state.myId)
         this.getAlbumDetails();
         this.getAlbumTracks();
     }

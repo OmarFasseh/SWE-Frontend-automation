@@ -42,32 +42,32 @@ messaging.onTokenRefresh(() => {
     });
   });
 
-self.addEventListener('notificationclick', (event) => {
-    if (event.action) {
-        clients.openWindow(event.action);
-    }
-    event.notification.close();
-}); 
+// self.addEventListener('notificationclick', (event) => {
+//     if (event.action) {
+//         clients.openWindow(event.action);
+//     }
+//     event.notification.close();
+// }); 
 
 // register service worker & handle push events
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-            updateViaCache: 'none'
-        });
-        messaging.useServiceWorker(registration);
-        messaging.onMessage((payload) => {
-            const title = payload.notification.title;
-            const options = {
-                body: payload.notification.body,
-                icon: payload.notification.icon,
-                actions: [
-                    {
-                        action: payload.fcmOptions.link,
-                    }
-                ]
-            };
-            registration.showNotification(title, options);           
-        });
-    });
-}
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', async () => {
+//         const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+//             updateViaCache: 'none'
+//         });
+//         messaging.useServiceWorker(registration);
+//         messaging.onMessage((payload) => {
+//             const title = payload.notification.title;
+//             const options = {
+//                 body: payload.notification.body,
+//                 icon: payload.notification.icon,
+//                 actions: [
+//                     {
+//                         action: payload.fcmOptions.link,
+//                     }
+//                 ]
+//             };
+//             registration.showNotification(title, options);           
+//         });
+//     });
+// }

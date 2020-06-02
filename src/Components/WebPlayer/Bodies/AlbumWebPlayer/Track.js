@@ -63,7 +63,7 @@ export class Track extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props);
+        console.log("track",this.props);
         this.props.track.artists.map((artist)=>(
             this.setState({artists:artist.name})
         ));

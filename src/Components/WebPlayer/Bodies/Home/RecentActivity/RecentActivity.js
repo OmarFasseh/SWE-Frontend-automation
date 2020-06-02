@@ -35,12 +35,10 @@ constructor(){
 }
 componentDidMount(){
     
-    axios.get(this.context.baseURL +'/me/notifications',
+    axios.get(this.context.baseURL +'/me/notifications?limit=4',
     {
        headers:{'authorization':"Bearer "+localStorage.getItem('token')},
-       query:{
-           limit:6,
-       }
+
        }
     ) 
       .then(res => {
@@ -85,13 +83,9 @@ element.classList.toggle("show");
 }
 
 nextpage=(pagenumber)=>{ 
-    axios.get(this.context.baseURL +'/me/notifications',
+    axios.get(this.context.baseURL +'/me/notifications?limit=4&page='+pagenumber,
         {
-        headers:{'authorization':"Bearer "+localStorage.getItem('token')},
-        query:{
-            limit:4,
-            page:this.state.pagenumber,
-        }
+        headers:{'authorization':"Bearer "+localStorage.getItem('token')}
         }
      )
 .then(res => {
