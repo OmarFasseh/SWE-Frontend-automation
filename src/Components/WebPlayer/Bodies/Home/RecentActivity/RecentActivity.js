@@ -30,6 +30,11 @@ constructor(){
          * @type {Number}
          */
         currentpage:1,
+        /**
+         * 
+         * To check theres no error in picture 
+         *  */
+        imageLoadError: true,
 
     }
 }
@@ -159,7 +164,14 @@ render(){
         {this.state.recents.map( recents => (
 			<div class="notify-item">
 				<div class="notify-img">
-					<img src={recents.image} onError="this.onerror=null; this.src='https://image.shutterstock.com/image-vector/social-member-vector-icon-person-260nw-1139787308.jpg'" alt="Profile Picture here "></img>
+                    <img src={recents.image} 
+                       onError={e => { 
+                            e.target.src = 'fallbackImage.png';
+                        }
+                    }
+                     alt="Profile Picture here "></img>
+
+
 				</div>
 				<div class="notify-info">
 					<p>{recents.description}</p>
