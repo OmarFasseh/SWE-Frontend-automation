@@ -159,7 +159,7 @@ render(){
         {this.state.recents.map( recents => (
 			<div class="notify-item">
 				<div class="notify-img">
-					<img src={recents.image} alt="profile-pic"></img>
+					<img src={recents.image} alt="https://image.shutterstock.com/image-vector/social-member-vector-icon-person-260nw-1139787308.jpg"></img>
 				</div>
 				<div class="notify-info">
 					<p>{recents.description}</p>
