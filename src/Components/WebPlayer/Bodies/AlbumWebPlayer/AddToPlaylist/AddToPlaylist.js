@@ -132,9 +132,13 @@ render() {
       <div className="row" >
                      <div className="playlist-items-wrapper">
                      {this.state.playlists.map(playlist => (
-                                        <div className="playlist-item-wrapper"  id={playlist.id} onClick={this.sendThis(playlist.id)} >
+                                        <div className="playlist-item-wrapper"  id={playlist.id}  >
                                             <div className="playlist-index-img-background"  >
-                                                <img src={playlist.imageUrl} alt="Playlist image" onError={e => { e.target.src ='https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg'}}></img>
+                                                <img src={playlist.imageUrl} alt="Playlist image" onError={e => { e.target.src ='https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg'}} onClick={()=>{this.sendThis(playlist.id)}}>
+                                                <div className="playlist-icon-wrapper"   >
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </div>
+                                                </img>
                                                 <div className="playlist-img-text-wrapper" >               
                                                     <div className="playlist-subtitle"  >
                                                         <div className="my-playlist-playlist-info">
