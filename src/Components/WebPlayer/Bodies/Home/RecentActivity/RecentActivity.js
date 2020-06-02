@@ -83,7 +83,7 @@ element.classList.toggle("show");
 }
 
 nextpage=(pagenumber)=>{ 
-    this.setState({recents:[]})
+    
     axios.get(this.context.baseURL +'/me/notifications?limit=4&page='+pagenumber,
         {
         headers:{'authorization':"Bearer "+localStorage.getItem('token')}
@@ -92,7 +92,7 @@ nextpage=(pagenumber)=>{
      .then(res => {
         console.log(res)
       if (res.status===200)
-      {
+      {       
               this.setState({
                   recents: res.data.data.results.items.map( recents => ({
                       /**
@@ -137,9 +137,7 @@ render(){
     * @type {Number}
     * To count the total number of Pages needed  passed to the Pagination Componen
      */
-    let numberPages = Math.ceil(this.state.totalResults /4);
-
-
+    let numberPages = Math.floor(this.state.totalResults /4);
 
     return(
     <div class="wrapper" id="recent-activity-wrap">

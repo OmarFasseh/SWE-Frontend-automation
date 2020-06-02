@@ -137,11 +137,11 @@ render() {
                                                 <img src={playlist.imageUrl} alt="Playlist image"
                                                  onError={e => { 
                                                     e.target.src = 'https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg';}}
-                                            ></img>
+                                            >
                                                 <div className="playlist-icon-wrapper"   >
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                                 </div>
-                                                
+                                                </img>
                                                 <div className="playlist-img-text-wrapper" >               
                                                     <div className="playlist-subtitle"  >
                                                         <div className="my-playlist-playlist-info">
