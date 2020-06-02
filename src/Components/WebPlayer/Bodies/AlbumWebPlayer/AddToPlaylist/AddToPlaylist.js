@@ -135,7 +135,9 @@ render() {
                      {this.state.playlists.map(playlist => (
                                         <div className="playlist-item-wrapper"  id={playlist.id} onClick={this.sendThis(playlist.id)} >
                                             <div className="playlist-index-img-background"  >
-                                                <img src={playlist.imageUrl} alt="https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg"></img>
+                                                <img src={playlist.imageUrl}
+                                                 onError="this.onerror=null; this.src='https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg'" alt="Playlist Picture here "
+                                                 ></img>
                                                 <div className="playlist-img-text-wrapper" >               
                                                     <div className="playlist-subtitle"  >
                                                         <div className="my-playlist-playlist-info">

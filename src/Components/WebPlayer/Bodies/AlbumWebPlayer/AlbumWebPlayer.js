@@ -180,7 +180,7 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-            alert(error.response.data.message);
+            message(error.response.data.message);
         })
     }
 
@@ -209,7 +209,7 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-           alert(error.response.data.message);
+            message(error.response.data.message);
         })
     }
 
@@ -234,7 +234,7 @@ export class AlbumWebPlayer extends Component {
                 else responseHandler(res);
             })
             .catch(error => {
-            alert(error.response.data.message);
+                message(error.response.data.message);
             })
         }
         else{
