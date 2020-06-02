@@ -128,7 +128,7 @@ nextpage=(pagenumber)=>{
     responseHandler(res);
 }
 else{
-    alert("error");
+    console.log("error");
 }
 }) 
  

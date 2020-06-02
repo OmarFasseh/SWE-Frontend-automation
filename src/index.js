@@ -39,7 +39,7 @@ messaging.requestPermission()
          axios.put("https://totallynotspotify.codes/api/me/notifications/token",
           {
             "token":token,
-            "type":"frontend"
+            "type":"web"
             },
              {
             headers: {

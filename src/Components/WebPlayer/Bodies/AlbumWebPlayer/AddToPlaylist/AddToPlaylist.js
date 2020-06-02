@@ -105,7 +105,6 @@ import './AddToPlaylist.css'
         })
         .catch(error => {
             console.log(error);
-            alert(error);
         })
     }
 
