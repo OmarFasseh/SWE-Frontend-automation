@@ -136,8 +136,7 @@ render() {
                                             <div className="playlist-index-img-background"  >
                                                 <img src={playlist.imageUrl} alt="Playlist image"
                                                  onError={e => { 
-                                                    e.target.src = 'https://cdn.discordapp.com/attachments/715652769096400926/717161952056574012/temp.jpg';}}
-                                            >
+                                                    e.target.src ='https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX38758453.jpg';}}>
                                                 <div className="playlist-icon-wrapper"   >
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                                 </div>
