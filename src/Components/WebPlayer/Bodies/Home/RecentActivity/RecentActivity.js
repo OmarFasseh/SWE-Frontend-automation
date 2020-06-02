@@ -89,43 +89,41 @@ nextpage=(pagenumber)=>{
         headers:{'authorization':"Bearer "+localStorage.getItem('token')}
         }
      )
-.then(res => {
-    if (res.status===200)
-    {
+     .then(res => {
         console.log(res)
-    this.setState({
-        recents: res.data.items.map( recents => ({
-            /**
-             * @type {string}
-             */
-            id:recents.data.id,
-            /**
-             * Time of the activity 
-             * @type {time}
-             */
-            time:recents.time,
-            /**
-             * @type {string}
-             * recent activity description 
-             */
-            description: recents.notification.body,
-            /**
-             * link to image of the notification item
-             * @type {link}
-             */
-            image:recents.images[0]
-        })),
-        totalResults: res.data.data.results.total,
-        currentpage:pagenumber,
-    })
-}
-  else if(res.status===401){
-    responseHandler(res);
-}
-else{
-    console.log("error");
-}
-}) 
+      if (res.status===200)
+      {
+              this.setState({
+                  recents: res.data.data.results.items.map( recents => ({
+                      /**
+                       * @type {string}
+                       */
+                    id:recents.data.id,
+                      /**
+                       * Time of the activity 
+                       * @type {time}
+                       */
+                     time:recents.time,
+                      /**
+                       * recent activity description 
+                       */
+                    description: recents.notification.body,
+                      /**
+                       * link to image of the notification item
+                       * @type {link}
+                       */
+                   image:recents.data.images[0]
+                  })),
+                 totalResults: res.data.data.results.total
+              })
+          }
+              else if(res.status===401){
+                  responseHandler(res);
+              }
+          })  
+          .catch(res=>{
+              console.log(res); }) 
+
  
 
 }
