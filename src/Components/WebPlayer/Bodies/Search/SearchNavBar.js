@@ -78,7 +78,7 @@ class SearchNavBar extends Component {
             "notFound":"0"
         }
         this.searchHandler = this.searchHandler.bind(this);
-        this.getTracks=this.getTracks.bind(this);
+        //this.getTracks=this.getTracks.bind(this);
             
     }
     /**When the component mounts it sends a request to the backend to load the albums
@@ -179,7 +179,7 @@ class SearchNavBar extends Component {
                     alert(res.message);
                 }
             })
-            //this.searchHandler('');
+            this.searchHandler('');
     }
 
     /**log out from spotify 
@@ -252,6 +252,7 @@ class SearchNavBar extends Component {
                     console.log("tracks in gettracks:",this.state.tracks);
                 }
                 },function(){
+                    console.log("state inside function:",this.state);
                     if(this.state.notFound!=0){
                         document.getElementById("search-not-searching").classList.add("hide");
                         document.getElementById("search-searching").classList.remove("hide");
