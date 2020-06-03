@@ -264,6 +264,8 @@ class SearchNavBar extends Component {
                         document.getElementById("search-searching").classList.add("hide");
                         document.getElementById("search-not-found-searching").classList.remove("hide");
                     }
+                },function(){
+                    window.location.reload();
                 }
               )
               
