@@ -244,15 +244,23 @@ class SearchNavBar extends Component {
                     console.log("response of search (items):",res.data.data.results.items);
                     this.setState({tracks:res.data.data.results.items})
                     this.setState({notFound:res.data.data.results.total})
+                    console.log("response of search (notFound):",this.state.notFound);
+                    console.log("response of search (items):",this.state.tracks);
                 }
                 else{
                     this.setState({tracks:[]})
                     this.setState({notFound:0})
                     console.log("not found in gettracks:",this.state.notFound);
                     console.log("tracks in gettracks:",this.state.tracks);
+                    
+                    console.log("response of search (notFound) else : ",this.state.notFound);
+                    console.log("response of search (items)else : ",this.state.tracks);
                 }
                 },function(){
                     console.log("state inside function:",this.state);
+                    
+                    console.log("response of search (notFound)function:",this.state.notFound);
+                    console.log("response of search (items)function:",this.state.tracks);
                     if(this.state.notFound!=0){
                         document.getElementById("search-not-searching").classList.add("hide");
                         document.getElementById("search-searching").classList.remove("hide");
