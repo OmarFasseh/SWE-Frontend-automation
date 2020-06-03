@@ -179,7 +179,7 @@ class SearchNavBar extends Component {
                     alert(res.message);
                 }
             })
-            this.searchHandler('');
+            //this.searchHandler('');
     }
 
     /**log out from spotify 
@@ -222,7 +222,7 @@ class SearchNavBar extends Component {
      */
       searchHandler(event){
         this.setState({text:event});
-        this.getTracks(event);
+        //this.getTracks(event);
         console.log("tracks in search handler :",this.state.tracks);
         console.log("not found in search handler :",this.state.notFound);
         console.log("text inside search handler : ",event);
@@ -233,32 +233,53 @@ class SearchNavBar extends Component {
             
         }
         else{
-            this.componentDidMount();    
+            //this.componentDidMount();    
               /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-            if(this.state.notFound!=0){
-                document.getElementById("search-not-searching").classList.add("hide");
-                document.getElementById("search-searching").classList.remove("hide");
-                document.getElementById("search-not-found-searching").classList.add("hide");
-               /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-            }
-            else if(this.state.notFound==0){
-                document.getElementById("search-not-searching").classList.add("hide");
-                document.getElementById("search-searching").classList.add("hide");
-                document.getElementById("search-not-found-searching").classList.remove("hide");
-            }
+              axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
+              .then(res => {
+                console.log("res status: ",res.status);
+                if(res.status===200)
+                {   
+                    console.log("response of search (total):",res.data.data.results.total);
+                    console.log("response of search (items):",res.data.data.results.items);
+                    this.setState({tracks:res.data.data.results.items})
+                    this.setState({notFound:res.data.data.results.total})
+                }
+                else{
+                    this.setState({tracks:[]})
+                    this.setState({notFound:0})
+                    console.log("not found in gettracks:",this.state.notFound);
+                    console.log("tracks in gettracks:",this.state.tracks);
+                }
+                },function(){
+                    if(this.state.notFound!=0){
+                        document.getElementById("search-not-searching").classList.add("hide");
+                        document.getElementById("search-searching").classList.remove("hide");
+                        document.getElementById("search-not-found-searching").classList.add("hide");
+                       /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
+                    }
+                    else if(this.state.notFound==0){
+                        document.getElementById("search-not-searching").classList.add("hide");
+                        document.getElementById("search-searching").classList.add("hide");
+                        document.getElementById("search-not-found-searching").classList.remove("hide");
+                    }
+                }
+              )
+              
+              
         }
       }
     /**get all tracks of the album 
          * @type {Function}
          * @memberof SearchNavBar
          */
-        getTracks(typed){
+     /*   getTracks(typed){
             
             console.log("text before sending to search(in get tracks):",typed);
             console.log("baseURL (in get tracks):",this.context.baseURL);
             /* http://localhost:3000/album_tracks/1*/
             /**this.context.baseURL+ */
-            axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
+       /*     axios.get(this.context.baseURL+"/search?q="+typed+"&limit=10")
                 .then(res => {
                     console.log("res status: ",res.status);
                 if(res.status===200)
@@ -276,10 +297,7 @@ class SearchNavBar extends Component {
                 }
                 }    
                 )
-                
-            
-     
-            }
+            }*/
             
         /**set currently playing song to an id 
          * @type {Function}
