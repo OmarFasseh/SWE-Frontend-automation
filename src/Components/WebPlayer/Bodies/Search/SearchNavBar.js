@@ -266,31 +266,16 @@ class SearchNavBar extends Component {
                     console.log("response of search (items):",this.state.tracks);
                 }
                 else{
-                    this.setState({
-                        tracks:[],
-                        notFound:0
-                    },function(){
-                        console.log("state inside function else:",this.state);
-                        
-                        console.log("response of search (notFound)function else:",this.state.notFound);
-                        console.log("response of search (items)function else:",this.state.tracks);
-                        if(this.state.notFound!=0){
-                            document.getElementById("search-not-searching").classList.add("hide");
-                            document.getElementById("search-searching").classList.remove("hide");
-                            document.getElementById("search-not-found-searching").classList.add("hide");
-                           /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-                        }
-                        else if(this.state.notFound==0){
-                            document.getElementById("search-not-searching").classList.add("hide");
-                            document.getElementById("search-searching").classList.add("hide");
-                            document.getElementById("search-not-found-searching").classList.remove("hide");
-                        }
-                    })
-                    console.log("not found in gettracks:",this.state.notFound);
-                    console.log("tracks in gettracks:",this.state.tracks);
                     
-                    console.log("response of search (notFound) else : ",this.state.notFound);
-                    console.log("response of search (items)else : ",this.state.tracks);
+                    console.log("state inside function else:",this.state);
+                    
+                    console.log("response of search (notFound)function else:",this.state.notFound);
+                    console.log("response of search (items)function else:",this.state.tracks);
+                    
+                    document.getElementById("search-not-searching").classList.add("hide");
+                    document.getElementById("search-searching").classList.add("hide");
+                    document.getElementById("search-not-found-searching").classList.remove("hide");
+                        
                 }
                 }
               )
