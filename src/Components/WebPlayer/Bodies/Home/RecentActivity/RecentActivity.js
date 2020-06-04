@@ -29,16 +29,18 @@ constructor(){
          * Current Paging Number that I am in now 
          * @type {Number}
          */
-        currentPage:1,
+        currentpage:1,
 
     }
 }
 componentDidMount(){
     
-    axios.get(this.context.baseURL +'/me/notifications?limit=4',
+    axios.get(this.context.baseURL +'/me/notifications',
     {
        headers:{'authorization':"Bearer "+localStorage.getItem('token')},
-
+       query:{
+           limit:6,
+       }
        }
     ) 
       .then(res => {
@@ -64,17 +66,65 @@ componentDidMount(){
                          * link to image of the notification item
                          * @type {link}
                          */
-                     image:recents.data.images[0]
+                     image:recents.images[0]
                     })),
                    totalResults: res.data.data.results.total
                 })
+                console.log("one dataa ")
             }
                 else if(res.status===401){
                     responseHandler(res);
                 }
             })  
             .catch(res=>{
-                console.log(res); }) 
+                console.log(res); 
+                axios.get(this.context.baseURL +'/me/notifications',
+                {
+                   headers:{'authorization':"Bearer "+localStorage.getItem('token')},
+                   query:{
+                       limit:6,
+                   }
+                   }
+                ) 
+                  .then(res => {
+                      console.log(res)
+                    if (res.status===200)
+                    {
+                        console.log("data wa7da" )
+                            this.setState({
+                                recents: res.data.results.items.map( recents => ({
+                                    /**
+                                     * @type {string}
+                                     */
+                                  id:recents.data.id,
+                                    /**
+                                     * Time of the activity 
+                                     * @type {time}
+                                     */
+                                   time:recents.time,
+                                    /**
+                                     * recent activity description 
+                                     */
+                                  description: recents.notification.body,
+                                    /**
+                                     * link to image of the notification item
+                                     * @type {link}
+                                     */
+                                 image:recents.images[0]
+                                })),
+                               totalResults: res.data.results.total
+                            })
+                            console.log("one dataa ")
+                        }
+                            else if(res.status===401){
+                                responseHandler(res);
+                            }
+                        })  
+                        .catch(res=>{
+                            console.log(res);} 
+                        )
+            
+                        })
 
 }
 toggledropdown=()=> {
@@ -83,48 +133,52 @@ element.classList.toggle("show");
 }
 
 nextpage=(pagenumber)=>{ 
-    
-    axios.get(this.context.baseURL +'/me/notifications?limit=4&page='+pagenumber,
+    axios.get(this.context.baseURL +'/me/notifications',
         {
-        headers:{'authorization':"Bearer "+localStorage.getItem('token')}
+        headers:{'authorization':"Bearer "+localStorage.getItem('token')},
+        query:{
+            limit:6,
+            page:this.state.pagenumber,
+        }
         }
      )
-     .then(res => {
+.then(res => {
+    if (res.status===200)
+    {
         console.log(res)
-      if (res.status===200)
-      {       
-              this.setState({
-                  recents: res.data.data.results.items.map( recents => ({
-                      /**
-                       * @type {string}
-                       */
-                    id:recents.data.id,
-                      /**
-                       * Time of the activity 
-                       * @type {time}
-                       */
-                     time:recents.time,
-                      /**
-                       * recent activity description 
-                       */
-                    description: recents.notification.body,
-                      /**
-                       * link to image of the notification item
-                       * @type {link}
-                       */
-                   image:recents.data.images[0]
-                  })),
-                  currentPage:pagenumber,
-                 totalResults: res.data.data.results.total
-              })
-          }
-              else if(res.status===401){
-                  responseHandler(res);
-              }
-          })  
-          .catch(res=>{
-              console.log(res); }) 
-
+    this.setState({
+        recents: res.data.items.map( recents => ({
+            /**
+             * @type {string}
+             */
+            id:recents.data.id,
+            /**
+             * Time of the activity 
+             * @type {time}
+             */
+            time:recents.time,
+            /**
+             * @type {string}
+             * recent activity description 
+             */
+            description: recents.notification.body,
+            /**
+             * link to image of the notification item
+             * @type {link}
+             */
+            image:recents.images[0]
+        })),
+        totalResults: res.total,
+        currentpage:pagenumber,
+    })
+}
+  else if(res.status===401){
+    responseHandler(res);
+}
+else{
+    alert("error");
+}
+}) 
  
 
 }
@@ -137,7 +191,9 @@ render(){
     * @type {Number}
     * To count the total number of Pages needed  passed to the Pagination Componen
      */
-    let numberPages = Math.floor(this.state.totalResults /4);
+    let numberPages = Math.ceil(this.state.totalResults / 5);
+
+
 
     return(
     <div class="wrapper" id="recent-activity-wrap">
@@ -151,9 +207,7 @@ render(){
         {this.state.recents.map( recents => (
 			<div class="notify-item">
 				<div class="notify-img">
-					<img src={recents.image} alt="profile-pic"
-                    onError={e => {e.target.src = 'https://image.shutterstock.com/image-vector/social-member-vector-icon-person-260nw-1139787308.jpg';}}
-                    ></img>
+					<img src={recents.image} alt="profile-pic"></img>
 				</div>
 				<div class="notify-info">
 					<p>{recents.description}</p>
@@ -161,7 +215,7 @@ render(){
 				</div>
 			</div>
         ))}
-        {this.state.totalResults>4? <Pagination pages={numberPages} nextpage={this.nextpage} currentPage={this.state.currentPage}/> : ''}
+        {this.state.totalResults>4? <Pagination pages={numberPages} nextpage={this.nextpage} currentPage={this.state.currentpage}/> : ''}
            {/* {console.log(this.state.currentpage)}
         {console.log(numberPages)} */}
             </div>

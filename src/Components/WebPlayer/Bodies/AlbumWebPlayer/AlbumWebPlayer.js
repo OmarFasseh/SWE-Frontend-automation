@@ -140,10 +140,9 @@ export class AlbumWebPlayer extends Component {
     }
 
     componentDidMount(){
-      
+
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
-        console.log(this.state.myId)
         this.getAlbumDetails();
         this.getAlbumTracks();
     }
@@ -181,7 +180,7 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-            console.log(error);
+            alert(error.response.data.message);
         })
     }
 
@@ -210,7 +209,7 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-           console.log(error);
+           alert(error.response.data.message);
         })
     }
 
@@ -235,7 +234,7 @@ export class AlbumWebPlayer extends Component {
                 else responseHandler(res);
             })
             .catch(error => {
-            console.log(error);
+            alert(error.response.data.message);
             })
         }
         else{
@@ -253,7 +252,7 @@ export class AlbumWebPlayer extends Component {
                 else responseHandler(res);
             })
             .catch(error => {
-            console.log(error);
+            alert(error.response.data.message);
             })
         }
     }

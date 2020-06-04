@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
  */
 export class TracksList extends Component {
     componentDidMount(){
-        console.log("tracklist", this.props);
+        console.log(this.props);
     }
     render() {
         return this.props.tracks.map((track) => (

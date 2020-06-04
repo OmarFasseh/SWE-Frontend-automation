@@ -116,8 +116,9 @@ const TrackUpload = (props) => {
             );
           },
         }
-      );
-
+      )
+      .catch(console.log(res));
+      console.log(res);
       const { fileName, filePath } = res.data;
 
       setUploadedFile({ fileName, filePath });

@@ -23,7 +23,8 @@ class MyPlaylists extends Component {
         }
     }
 
- /**Sends request to the backend to  get users Playlists 
+ /*
+  *Sends request to the backend to  get users Playlists 
    * @type {Function}
    * @memberof MyPlaylists
    */
