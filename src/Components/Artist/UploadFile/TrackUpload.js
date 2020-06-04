@@ -117,7 +117,7 @@ const TrackUpload = (props) => {
           },
         }
       )
-      .catch(console.log(res));
+      .catch((res) => {console.log(res)});
       console.log(res);
       const { fileName, filePath } = res.data;
 
