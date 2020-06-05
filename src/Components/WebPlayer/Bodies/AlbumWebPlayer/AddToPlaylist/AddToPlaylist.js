@@ -71,8 +71,8 @@ import './AddToPlaylist.css'
                   }))
               }) } else 
               responseHandler(res);
-          }).catch(res=>{
-              console.log(res);
+          }).catch((error) => {
+            alert(error.response.data.message);
             }) 
     }
 
