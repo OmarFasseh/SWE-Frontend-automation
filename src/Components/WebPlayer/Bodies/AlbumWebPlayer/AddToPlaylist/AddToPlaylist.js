@@ -3,6 +3,7 @@ import axios from 'axios'
 import $ from "jquery"
 import {ConfigContext} from "../../../../../Context/ConfigContext"
 import { responseHandler } from "../../../../../ReduxStore/Shared"
+import CreatePlaylist from '../../Home/CreatePlaylist/CreatePlaylist'
 import './AddToPlaylist.css'
 
 
@@ -105,6 +106,7 @@ import './AddToPlaylist.css'
         })
         .catch(error => {
             console.log(error);
+            alert(error.response.data.message);
         })
     }
 
@@ -113,6 +115,7 @@ render() {
   //  console.log("Addtoplaylist",this.state.trackid)
     return(
     <div>
+         <CreatePlaylist/>
     <div className="modal" id="AddSongToPlaylist" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div className="modal-dialog modal-dialog-centered mw-100 w-100" id="create-playlist-modal" role="document">
     <div className="modal-content" id="modal-content-create" >
@@ -124,6 +127,11 @@ render() {
 
         <div className="modal-header" id="playlist-modal-header">
         <h5 className="modal-title" id="modal-title">Add to Playlist</h5>
+        <div className="row" >
+        <button type="button" id="index-cover-btn" data-toggle="modal" data-target="#static-back-drop">
+         Create a new playlist 
+         </button>
+        </div>
      </div> 
 
       </div>
