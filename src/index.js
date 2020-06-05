@@ -37,9 +37,9 @@ messaging.requestPermission()
     return messaging.getToken();
   })
   .then(function(token){
-  console.log("token is "); 
-  messaging.updateUIForPushEnabled(token);
+    messaging.updateUIForPushEnabled(token);
   messaging.sendSubscriptionToServer(token);
+  console.log("token is "); 
   console.log(token);
          axios.put("https://totallynotspotify.codes/api/me/notifications/token",
           {
@@ -62,7 +62,7 @@ messaging.requestPermission()
       })
   })
 .catch(function(err){
-  console.log("error occured")
+  alert(err);
 })
 messaging.onMessage((payload) => {
   console.log('Message received. ', payload);
