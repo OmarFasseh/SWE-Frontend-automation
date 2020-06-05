@@ -140,9 +140,10 @@ export class AlbumWebPlayer extends Component {
     }
 
     componentDidMount(){
-
+      
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
+        console.log(this.state.myId)
         this.getAlbumDetails();
         this.getAlbumTracks();
     }
@@ -180,7 +181,7 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-            alert(error.response.data.message);
+            console.log(error);
         })
     }
 
@@ -209,7 +210,7 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-           alert(error.response.data.message);
+           console.log(error);
         })
     }
 
@@ -234,7 +235,7 @@ export class AlbumWebPlayer extends Component {
                 else responseHandler(res);
             })
             .catch(error => {
-            alert(error.response.data.message);
+            console.log(error);
             })
         }
         else{
@@ -252,7 +253,7 @@ export class AlbumWebPlayer extends Component {
                 else responseHandler(res);
             })
             .catch(error => {
-            alert(error.response.data.message);
+            console.log(error);
             })
         }
     }
@@ -499,7 +500,7 @@ export class AlbumWebPlayer extends Component {
                            <div className="row">
                                 <div className="row album-details-div">
                                     <div className="album-image-div">
-                                        <img className="album-image" src={this.state.album_image} alt="album pic"/>   {/*TrackImage*/}
+                                        <img className="album-image" src={TrackImage} alt="album pic"/>   {/*this.state.album_image*/}
                                     </div>
                                     <div className="album-below-image-div">
                                         <div className="album-title-div">
