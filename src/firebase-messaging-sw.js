@@ -91,27 +91,26 @@ self.addEventListener('push', async function(event) {
       })
   );
 });
-
-self.addEventListener('notificationclick', function(event) {
-  console.log('[firebase-messaging-sw.js] Received notificationclick event ', event);
+// self.addEventListener('notificationclick', function(event) {
+//   console.log('[firebase-messaging-sw.js] Received notificationclick event ', event);
   
-  var click_action = event.notification.data;
-  event.notification.close();
-  // This looks to see if the current is already open and
-  // focuses if it is
-  event.waitUntil(clients.matchAll({
-      type: "window"
-  }).then(function(clientList) {
-      for (var i = 0; i < clientList.length; i++) {
-          var client = clientList[i];
-          if (client.url == click_action  && 'focus' in client)
-              return client.focus();
-      }
-      if (clients.openWindow)
-          return clients.openWindow(click_action);
-      }));
+//   var click_action = event.notification.data;
+//   event.notification.close();
+//   // This looks to see if the current is already open and
+//   // focuses if it is
+//   event.waitUntil(clients.matchAll({
+//       type: "window"
+//   }).then(function(clientList) {
+//       for (var i = 0; i < clientList.length; i++) {
+//           var client = clientList[i];
+//           if (client.url == click_action  && 'focus' in client)
+//               return client.focus();
+//       }
+//       if (clients.openWindow)
+//           return clients.openWindow(click_action);
+//       }));
   
-  });
+//   });
   const showMessage = function(payload){
       console.log('showMessage', payload);
       const notificationTitle = payload.data.title;
@@ -127,7 +126,7 @@ self.addEventListener('notificationclick', function(event) {
      self.registration.showNotification(notificationTitle,notificationOptions); 
   }   
   messaging.setBackgroundMessageHandler(showMessage);
-  
+  messaging.onMessage(showMessage);
   self.addEventListener('message', function (evt) {     
     console.log("self",self);
     showMessage( evt.data );
