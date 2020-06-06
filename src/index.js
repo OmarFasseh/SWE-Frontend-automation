@@ -69,6 +69,7 @@ messaging.requestPermission()
 // });
 
 messaging.onMessage(function(payload) {
+  console.log("got message")
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
       body: payload.notification.body,
