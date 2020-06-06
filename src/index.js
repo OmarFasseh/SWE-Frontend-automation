@@ -194,13 +194,10 @@ serviceWorker.unregister();
         const targetDot=e.target.closest('li');
         
        if(!targetDot) return;
-
        const currentSlide =track.querySelector('.active');
       // const currentDot=dotNav.querySelector('.active');
        const targetIndex=dots.findIndex(dot => dot===targetDot);
-
        const targetSlide=imgs[targetIndex];
-
        moveToslide(track,currentSlide,targetSlide);
   }
   dotNav.addEventListener('onchange',changeImg);
