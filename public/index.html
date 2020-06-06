@@ -72,7 +72,7 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 // Add the public key generated from the console here.
-messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
+//messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
 messaging.requestPermission()
   .then (function(){
     console.log("Have permission");

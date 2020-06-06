@@ -13,9 +13,11 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
+
 // Get Instance ID token. Initially this makes a network call, once retrieved
 // subsequent calls to getToken will return from cache.
 // Callback fired if Instance ID token is updated.
+
 messaging.onTokenRefresh(() => {
     messaging.getToken().then((refreshedToken) => {
       console.log('Token refreshed.');
