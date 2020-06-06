@@ -56,27 +56,30 @@ messaging.onTokenRefresh(() => {
 });  */
 
 // register service worker & handle push events
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
-            updateViaCache: 'none'
-        });
-        messaging.useServiceWorker(registration);
-        messaging.onMessage((payload) => {
-            const title = payload.notification.title;
-            const options = {
-                body: payload.notification.body,
-                icon: payload.notification.icon,
-                actions: [
-                    {
-                        action: payload.fcmOptions.link,
-                    }
-                ]
-            };
-            registration.showNotification(title, options);           
-        });
-    });
-}
+// if ('serviceWorker' in navigator) {
+//     window.addEventListener('load', async () => {
+//         const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+//             updateViaCache: 'none'
+//         });
+//         messaging.useServiceWorker(registration);
+//         messaging.onMessage((payload) => {
+//             const title = payload.notification.title;
+//             const options = {
+//                 body: payload.data.body,
+//                 icon: payload.data.icon,
+//                 image: payload.data.image,
+//                 click_action: payload.data.click_action,
+//                 data:payload.data.click_action,
+//                 actions: [
+//                     {
+//                         action: payload.fcmOptions.link,
+//                     }
+//                 ]
+//             };
+//             registration.showNotification(title, options);           
+//         });
+//     });
+// }
 self.addEventListener('push', async function(event) {
   event.waitUntil(
       self.registration.showNotification('title', {
