@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.14.4/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/6.6.2/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/6.6.2/firebase-messaging.js');
 
 
 firebase.initializeApp({
@@ -44,12 +44,12 @@ messaging.onTokenRefresh(() => {
     });
   });
 
-self.addEventListener('notificationclick', (event) => {
+/* self.addEventListener('notificationclick', (event) => {
     if (event.action) {
         clients.openWindow(event.action);
     }
     event.notification.close();
-}); 
+});  */
 
 // register service worker & handle push events
 if ('serviceWorker' in navigator) {
@@ -80,3 +80,44 @@ self.addEventListener('push', async function(event) {
       })
   );
 });
+
+self.addEventListener('notificationclick', function(event) {
+  console.log('[firebase-messaging-sw.js] Received notificationclick event ', event);
+  
+  var click_action = event.notification.data;
+  event.notification.close();
+  // This looks to see if the current is already open and
+  // focuses if it is
+  event.waitUntil(clients.matchAll({
+      type: "window"
+  }).then(function(clientList) {
+      for (var i = 0; i < clientList.length; i++) {
+          var client = clientList[i];
+          if (client.url == click_action  && 'focus' in client)
+              return client.focus();
+      }
+      if (clients.openWindow)
+          return clients.openWindow(click_action);
+      }));
+  
+  });
+  const showMessage = function(payload){
+      console.log('showMessage', payload);
+      const notificationTitle = payload.data.title;
+      const notificationOptions = {
+          body: payload.data.body,
+          icon: payload.data.icon,
+          image: payload.data.image,
+          click_action: payload.data.click_action,
+          data:payload.data.click_action
+      };  
+  
+  
+    return self.registration.showNotification(notificationTitle,notificationOptions); 
+  }   
+  messaging.setBackgroundMessageHandler(showMessage);
+  
+  self.addEventListener('message', function (evt) {     
+    console.log("self",self);
+    showMessage( evt.data );
+  })
