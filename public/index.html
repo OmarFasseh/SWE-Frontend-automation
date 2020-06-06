@@ -53,5 +53,130 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-app.js"></script>                    
+    <script src="https://www.gstatic.com/firebasejs/3.5.0/firebase-messaging.js"></script>              
+    <script>                                                                                            
+                                                                        
+//   var config = {
+//   apiKey: "AIzaSyDstl21Iann4t-odVPIMFTXpI5ToD1jIC0",
+//   authDomain: "totally-not-spotify.firebaseapp.com",
+//   databaseURL: "https://totally-not-spotify.firebaseio.com",
+//   projectId: "totally-not-spotify",
+//   storageBucket: "totally-not-spotify.appspot.com",
+//   messagingSenderId: "262598048193",
+//   appId: "1:262598048193:web:8eb027331acfe77f625740",
+//   measurementId: "G-YDVW3R60NT"
+// };
+
+//firebase.initializeApp(config);
+
+const messaging = firebase.messaging();
+// Add the public key generated from the console here.
+messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
+messaging.requestPermission()
+  .then (function(){
+    console.log("Have permission");
+    return messaging.getToken();
+  })
+  .then(function(token){
+  //  messaging.updateUIForPushEnabled(token);
+  //messaging.sendSubscriptionToServer(token);
+       updateUIForPushEnabled(token);
+      sendSubscriptionToServer(token);
+  console.log("token is "); 
+  console.log(token);
+         axios.put("https://totallynotspotify.codes/api/me/notifications/token",
+          {
+            "token":token,
+            "type":"web"
+            },
+             {
+            headers: {
+              authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then(res => {
+            console.log(res)
+         if(res.status===204){
+            console.log("Request Succesful and token is ", token)
+        }
+      })
+      .catch(res => {
+        console.log(res)
+      })
+  })
+.catch(function(err){
+  alert(err);
+})    
+
+messaging.onMessage(function(payload) {
+  console.log("got message")
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+      body: payload.notification.body,
+      icon: payload.notification.icon,        
+  };
+  if (!("Notification" in window)) {
+    console.log("This browser does not support system notifications");
+}
+// Let's check whether notification permissions have already been granted
+else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    var notification = new Notification(notificationTitle,notificationOptions);
+    notification.onclick = function(event) {
+        event.preventDefault(); // prevent the browser from focusing the Notification's tab
+        window.open(payload.notification.click_action , '_blank');
+        notification.close();
+    }
+}
+});
+
+self.addEventListener('notificationclick', function(event) {
+  console.log('[firebase-messaging-sw.js] Received notificationclick event ', event);
+  
+  var click_action = event.notification.data;
+  event.notification.close();
+  // This looks to see if the current is already open and
+  // focuses if it is
+  event.waitUntil(clients.matchAll({
+      type: "window"
+  }).then(function(clientList) {
+      for (var i = 0; i < clientList.length; i++) {
+          var client = clientList[i];
+          if (client.url == click_action  && 'focus' in client)
+              return client.focus();
+      }
+      if (clients.openWindow)
+          return clients.openWindow(click_action);
+      }));
+  
+  });
+  const showMessage = function(payload){
+      console.log('showMessage', payload);
+      const notificationTitle = payload.data.title;
+      const notificationOptions = {
+          body: payload.data.body,
+          icon: payload.data.icon,
+          image: payload.data.image,
+          click_action: payload.data.click_action,
+          data:payload.data.click_action
+      };  
+  
+  
+     self.registration.showNotification(notificationTitle,notificationOptions); 
+  }   
+  messaging.setBackgroundMessageHandler(showMessage);
+  
+  self.addEventListener('message', function (evt) {     
+    console.log("self",self);
+    showMessage( evt.data );
+  })
+  
+  
+      </script>           
+
+
+
+
   </body>
 </html>
