@@ -113,7 +113,7 @@ self.addEventListener('notificationclick', function(event) {
       };  
   
   
-    return self.registration.showNotification(notificationTitle,notificationOptions); 
+     self.registration.showNotification(notificationTitle,notificationOptions); 
   }   
   messaging.setBackgroundMessageHandler(showMessage);
   

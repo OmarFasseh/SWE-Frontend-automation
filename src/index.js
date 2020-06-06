@@ -67,9 +67,7 @@ messaging.requestPermission()
 // messaging.onMessage((payload) => {
 //   console.log('Message received. ', payload);
 // });
-messaging.onMessage(function(payload) {
-  local_registration.active.postMessage(payload);
-})
+
 messaging.onMessage(function(payload) {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
