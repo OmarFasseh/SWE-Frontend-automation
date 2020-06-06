@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/6.6.2/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/6.6.2/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.14.4/firebase-messaging.js');
 
 
 firebase.initializeApp({
@@ -52,7 +52,7 @@ messaging.onTokenRefresh(() => {
 });  */
 
 // register service worker & handle push events
-/* if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
         const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
             updateViaCache: 'none'
@@ -72,7 +72,7 @@ messaging.onTokenRefresh(() => {
             registration.showNotification(title, options);           
         });
     });
-} */
+}
 self.addEventListener('push', async function(event) {
   event.waitUntil(
       self.registration.showNotification('title', {
