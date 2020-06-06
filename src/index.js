@@ -119,23 +119,24 @@ messaging.requestPermission()
 //   console.log('Message received. ', payload);
 // });
 
-messaging.onMessage(function(payload) {
+firebase.messaging().onMessage(function(payload) {
   console.log("got message")
-  const notificationTitle = payload.notification.title;
+  const notificationTitle = "Notification!! ";
   const notificationOptions = {
-      body: payload.notification.body,
-      icon: payload.notification.icon,        
+      body: payload.data.alert,
+      icon: payload.notification.icon, 
   };
   if (!("Notification" in window)) {
     console.log("This browser does not support system notifications");
 }
 // Let's check whether notification permissions have already been granted
-else if (Notification.permission === "granted") {
+//else if (Notification.permission === "granted") {
+  else {
     // If it's okay let's create a notification
     var notification = new Notification(notificationTitle,notificationOptions);
-    notification.onclick = function(event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        window.open(payload.notification.click_action , '_blank');
+    notification.onClick = function(event) {
+       // event.preventDefault(); // prevent the browser from focusing the Notification's tab
+        // window.open(payload.notification.click_action , '_blank');
         notification.close();
     }
 }
