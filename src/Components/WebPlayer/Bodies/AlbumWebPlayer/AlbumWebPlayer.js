@@ -57,8 +57,14 @@ export class AlbumWebPlayer extends Component {
          * @memberof AlbumWebPlayer
          * @type {Boolean}
          */
-        "is_liked":Boolean,
+        "is_liked":false,
         ///////////////////////////////////////////////////
+        /**
+         * Array of liked tracks' ids
+         * @memberof AlbumWebPlayer 
+         * @type {Array<String>}
+         */
+        "liked_tracks":[],
         /**
          * Total number of tracks in the album
          * @memberof AlbumWebPlayer
@@ -83,6 +89,12 @@ export class AlbumWebPlayer extends Component {
          * @type {String}
          */
         "playing_song_name":"",
+        /**
+         * if playing song is liked or not
+         * @memberof AlbumWebPlayer
+         * @type {Boolean}
+         */
+        "playing_song_is_liked":false,
         /**
          * Artist of the playing song
          * @memberof AlbumWebPlayer
@@ -140,9 +152,10 @@ export class AlbumWebPlayer extends Component {
     }
 
     componentDidMount(){
-
+      
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
+        console.log(this.state.myId)
         this.getAlbumDetails();
         this.getAlbumTracks();
     }
@@ -153,8 +166,9 @@ export class AlbumWebPlayer extends Component {
     */
     getAlbumDetails(){
         //this.context.baseURL+"/albums/"+this.state.myId
-        //http://spotify.mocklab.io/albums/12345
-        axios.get(this.context.baseURL+"/albums/"+this.state.myId,{
+        //"http://spotify.mocklab.io/albums/12345"
+        var link = this.context.baseURL === "http://spotify.mocklab.io"? "http://spotify.mocklab.io/albums/12345":this.context.baseURL+"/albums/"+this.state.myId;
+        axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -168,8 +182,7 @@ export class AlbumWebPlayer extends Component {
                 this.setState({
                     album_image:res.data.data.album.image,
                     album_name:res.data.data.album.name,
-                    album_total_tracks:res.data.data.album.totalTracks,
-                    is_liked:false //get from backend
+                    album_total_tracks:res.data.data.album.totalTracks
                 })
                 res.data.data.album.artists.map((artist)=>(
                     this.setState({
@@ -180,7 +193,31 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-            alert(error.response.data.message);
+            console.log(error);
+        })
+
+        //check if album is liked
+        axios.get(this.context.baseURL+"/me/likedAlbums",{
+            headers:{
+                'Content-Type':'application/json',
+                'authorization': "Bearer "+ localStorage.getItem("token")
+            }
+        })
+        .then(res => {
+            if(res.status===200){
+                res.data.data.albums.map((album) => {
+                    if(album._id === this.state.myId){
+                        this.setState({
+                            is_liked:true
+                        })
+                        return album;
+                    }
+                })
+            }
+            else responseHandler(res);
+        })
+        .catch(error => {
+            console.log(error);
         })
     }
 
@@ -191,7 +228,8 @@ export class AlbumWebPlayer extends Component {
     getAlbumTracks(){
         //this.context.baseURL+"/albums/"+this.state.myId+"/tracks"
         //"http://spotify.mocklab.io/albums/12345/tracks"
-        axios.get(this.context.baseURL+"/albums/"+this.state.myId+"/tracks",{
+        var link = this.context.baseURL === "http://spotify.mocklab.io"? "http://spotify.mocklab.io/albums/12345/tracks":this.context.baseURL+"/albums/"+this.state.myId+"/tracks";
+        axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -209,7 +247,27 @@ export class AlbumWebPlayer extends Component {
             else responseHandler(res);
         })
         .catch(error => {
-           alert(error.response.data.message);
+           console.log(error);
+        })
+
+        //gets array of liked tracks' ids
+        axios.get(this.context.baseURL+"/me/likedTracks",{
+            headers:{
+                'Content-Type':'application/json',
+                'authorization': "Bearer "+ localStorage.getItem("token")
+            }
+        })
+        .then(res => {
+            if(res.status===200){
+                res.data.data.tracks.map((track) => (
+                    this.state.liked_tracks.push(track._id)
+                ))
+                console.log("liked tracks: "+this.state.liked_tracks);
+            }
+            else responseHandler(res);
+        })
+        .catch(error => {
+            console.log(error);
         })
     }
 
@@ -219,17 +277,62 @@ export class AlbumWebPlayer extends Component {
      * @return {void}
      */
     likeButtonPressed=()=>{
-        if(this.state.is_liked){
-            axios.put("http://spotify.mocklab.io/me/likeAlbum",{body:{"id":this.state.myId}},{
+        if(!this.state.is_liked){
+            axios.put(this.context.baseURL+"/me/likeAlbum",{body:{"id":this.state.myId}},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
             })
             .then(res => {
                 if(res.status===204){
-                    this.setState(prevState =>({
-                        is_liked:!prevState.is_liked
-                    }))
+                    this.setState({
+                        is_liked:true
+                    })
+                }
+                else responseHandler(res);
+            })
+            .catch(error => {
+            console.log(error);
+            })
+        }
+        else{
+            axios.delete(this.context.baseURL+"/me/unlikeAlbum",{body:{"id":this.state.myId}},{
+                headers:{
+                    'authorization': "Bearer "+ localStorage.getItem("token"),
+                }
+            })
+            .then(res => {
+                if(res.status===204){
+                    this.setState({
+                        is_liked:false
+                    })
+                }
+                else responseHandler(res);
+            })
+            .catch(error => {
+            console.log(error);
+            })
+        }
+    }
+
+    /**
+     * toggles playing_song_is_liked and sends request to backend
+     * @memberof AlbumWebPlayer
+     */
+    trackLikeButtonPressed=()=>{
+        if(!this.state.playing_song_is_liked && this.state.playing_song_id !== ""){
+            axios.put(this.context.baseURL+"/me/likeTrack",{body:{"id":this.state.playing_song_id}},{
+                headers:{
+                    'authorization': "Bearer "+ localStorage.getItem("token"),
+                }
+            })
+            .then(res => {
+                if(res.status===204){
+                    this.setState({
+                        playing_song_is_liked:true
+                    })
+                    this.state.liked_tracks.push(this.state.playing_song_id);
+                    console.log("new liked tracks: "+this.state.liked_tracks);
                 }
                 else responseHandler(res);
             })
@@ -237,8 +340,8 @@ export class AlbumWebPlayer extends Component {
             alert(error.response.data.message);
             })
         }
-        else{
-            axios.delete("http://spotify.mocklab.io/me/unlikeAlbum",{body:{"id":this.state.myId}},{
+        else if(this.state.playing_song_id !== ""){
+            axios.delete(this.context.baseURL+"/me/unlikeTrack",{body:{"id":this.state.playing_song_id}},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
@@ -246,8 +349,10 @@ export class AlbumWebPlayer extends Component {
             .then(res => {
                 if(res.status===204){
                     this.setState(prevState =>({
-                        is_liked:!prevState.is_liked
+                        playing_song_is_liked:false,
+                        liked_tracks:prevState.liked_tracks.filter(e => e !== prevState.playing_song_id)
                     }))
+                    console.log("new liked tracks: "+this.state.liked_tracks);
                 }
                 else responseHandler(res);
             })
@@ -293,11 +398,25 @@ export class AlbumWebPlayer extends Component {
                 playing_song_number:number,
                 playing_song_name:name,
                 playing_song_artist:artist,
-                playing_song_minutes:minutes,
-                playing_song_seconds:seconds,
+                playing_song_is_liked:this.state.liked_tracks.includes(id),
                 is_playing:true
             })
-            this.audio.src=url;
+            ////////////to avoid integeration conflict/////////////
+            if(url === undefined){  
+                this.audio.src = "https://nogomistars.com/Online_Foldern/Amr_Diab/Sahraan/Nogomi.com_Amr_Diab-02.Sahran.mp3";
+                this.setState({
+                    playing_song_minutes:4,
+                    playing_song_seconds:46
+                })
+            }
+            else{
+                this.audio.src = url;
+                this.setState({
+                    playing_song_minutes:minutes,
+                    playing_song_seconds:seconds
+                })
+            }
+            ///////////////////////////////////////////////////////
             this.audio.play();
         }
     }
@@ -313,7 +432,7 @@ export class AlbumWebPlayer extends Component {
             this.setState({
                 is_playing:false,
                 playing_song_id:"",
-                playing_song_number:0,
+                playing_song_number:0
             })
             this.audio.pause();
             this.audio.src="";
@@ -336,11 +455,27 @@ export class AlbumWebPlayer extends Component {
                         playing_song_id: track._id,
                         playing_song_name: track.name,
                         playing_song_number: track.trackNumber,
-                        playing_song_minutes: Math.floor(track.durationMs / 60000),
-                        playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0),
+                        playing_song_is_liked:this.state.liked_tracks.includes(track._id),
                         is_playing:true
                     })
-                    this.audio.src=track.preview_url;
+
+                    ////////////to avoid integeration conflict/////////////
+                    if(track.preview_url === undefined){  
+                        this.audio.src = "https://nogomistars.com/Online_Foldern/Amr_Diab/Sahraan/Nogomi.com_Amr_Diab-02.Sahran.mp3";
+                        this.setState({
+                            playing_song_minutes:4,
+                            playing_song_seconds:46
+                        })
+                    }
+                    else{
+                        this.audio.src=track.preview_url;
+                        this.setState({
+                            playing_song_minutes: Math.floor(track.durationMs / 60000),
+                            playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0)
+                        })
+                    }
+                    ///////////////////////////////////////////////////////
+
                     this.audio.play();
                     return track;
                 }
@@ -381,11 +516,27 @@ export class AlbumWebPlayer extends Component {
                         playing_song_id: track._id,
                         playing_song_name: track.name,
                         playing_song_number: track.trackNumber,
-                        playing_song_minutes: Math.floor(track.durationMs / 60000),
-                        playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0),
+                        playing_song_is_liked:this.state.liked_tracks.includes(track._id),
                         is_playing:true
                     })
-                    this.audio.src=track.preview_url;
+
+                    ////////////to avoid integeration conflict/////////////
+                    if(track.preview_url === undefined){  
+                        this.audio.src = "https://nogomistars.com/Online_Foldern/Amr_Diab/Sahraan/Nogomi.com_Amr_Diab-02.Sahran.mp3";
+                        this.setState({
+                            playing_song_minutes:4,
+                            playing_song_seconds:46
+                        })
+                    }
+                    else{
+                        this.audio.src=track.preview_url;
+                        this.setState({
+                            playing_song_minutes: Math.floor(track.durationMs / 60000),
+                            playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0)
+                        })
+                    }
+                    ///////////////////////////////////////////////////////
+                    
                     this.audio.play();
                     return track;
                 }
@@ -551,7 +702,8 @@ export class AlbumWebPlayer extends Component {
                         <PlayingBar id={this.state.playing_song_id} name={this.state.playing_song_name} artist={this.state.playing_song_artist} minutes={this.state.playing_song_minutes} 
                         seconds={this.state.playing_song_seconds} is_playing={this.state.is_playing} current_minutes={this.state.playing_song_current_minutes} current_seconds={this.state.playing_song_current_seconds}
                         setPlayerVolume={this.setPlayerVolume} seekSong={this.seekSong} PlayPauseButtonPressed={this.PlayPauseButtonPressed} nextSong={this.nextSong} previousSong={this.previousSong} 
-                        is_repeating={this.state.is_repeating} repeatButtonPressed={this.repeatButtonPressed} is_shuffling={this.state.is_shuffling} shuffleButtonPressed={this.shuffleButtonPressed} />
+                        is_repeating={this.state.is_repeating} repeatButtonPressed={this.repeatButtonPressed} is_shuffling={this.state.is_shuffling} shuffleButtonPressed={this.shuffleButtonPressed} 
+                        playing_song_is_liked={this.state.playing_song_is_liked} trackLikeButtonPressed={this.trackLikeButtonPressed} />
                 </div>
             </div>
         )
