@@ -60,8 +60,8 @@ class CreatePlaylist extends Component {
                 }
             })
             .catch(error => {
-                alert(error.response.data.message);
-                //alert(error);
+                console.log(error);
+                alert(error);
             })
     } 
 

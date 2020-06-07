@@ -71,8 +71,8 @@ import './AddToPlaylist.css'
                   }))
               }) } else 
               responseHandler(res);
-          }).catch((error) => {
-            alert(error.response.data.message);
+          }).catch(res=>{
+              console.log(res);
             }) 
     }
 
@@ -105,10 +105,6 @@ import './AddToPlaylist.css'
         })
         .catch(error => {
             console.log(error);
-<<<<<<< HEAD
-=======
-            alert(error.response.data.message);
->>>>>>> 1f75452dc2c6eaa544618318e43b764966e2c8ff
         })
     }
 
@@ -128,7 +124,6 @@ render() {
 
         <div className="modal-header" id="playlist-modal-header">
         <h5 className="modal-title" id="modal-title">Add to Playlist</h5>
-  
      </div> 
 
       </div>
