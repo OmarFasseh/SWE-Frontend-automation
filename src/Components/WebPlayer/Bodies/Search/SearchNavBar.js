@@ -4,6 +4,7 @@ import { Route } from 'react-router';
 import '../NavBars.css';
 import './SearchNavBar.css';
 import axios from 'axios'
+import { responseHandler } from '../../../../ReduxStore/Shared';
 
 import {ConfigContext} from '../../../../Context/ConfigContext'
 import { ProfileContext } from '../../../../Context/ProfileContext'
@@ -265,20 +266,8 @@ class SearchNavBar extends Component {
                     console.log("response of search (notFound):",this.state.notFound);
                     console.log("response of search (items):",this.state.tracks);
                 }
-                else{
-                    
-                    console.log("state inside function else:",this.state);
-                    
-                    console.log("response of search (notFound)function else:",this.state.notFound);
-                    console.log("response of search (items)function else:",this.state.tracks);
-                    
-                    document.getElementById("search-not-searching").classList.add("hide");
-                    document.getElementById("search-searching").classList.add("hide");
-                    document.getElementById("search-not-found-searching").classList.remove("hide");
-                        
-                }
-                }
-              )
+                else responseHandler(res);
+            })
               
               
         }
