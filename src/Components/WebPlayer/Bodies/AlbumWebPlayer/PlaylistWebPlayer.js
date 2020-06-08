@@ -157,8 +157,6 @@ export class PlaylistWebPlayer extends Component {
         const{myId}=this.props.location.state;//getting id from parent component
         const{myhref}=this.props.location.state;
         this.state.myId=myId;
-        console.log("myid: "+myId);
-        console.log("myhref: "+myhref);
         this.state.myhref=myhref;
         this.getPlaylistDetails();
         this.getPlaylistTracks();
@@ -173,7 +171,6 @@ export class PlaylistWebPlayer extends Component {
     */
     getPlaylistDetails(){
         var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
-        console.log("link1: "+link);
         axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
@@ -186,7 +183,7 @@ export class PlaylistWebPlayer extends Component {
                 console.log("Playlist details here")
                 console.log(res)
                 this.setState({
-                    playlist_image:res.data.data.playlist.image,
+                    playlist_image:res.data.data.playlist.images[0],
                     playlist_name:res.data.data.playlist.name,
                     playlist_total_tracks:res.data.data.playlist.totalTracks
                 })
@@ -228,7 +225,6 @@ export class PlaylistWebPlayer extends Component {
     */
     getPlaylistTracks(){
         var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
-        console.log("link2: "+link);
         axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
@@ -696,7 +692,7 @@ export class PlaylistWebPlayer extends Component {
                                 </div>
                                 <div className="tracks-list-div">
                                     <hr className="appear-on-small-screens"/>
-                                    <TracksList tracks={this.state.tracks} playing_song_id={this.state.playing_song_id} setPlayingSondId={this.setPlayingSondId}/>
+                                    <TracksList tracks={this.state.tracks} is_playing={this.state.is_playing} playing_song_id={this.state.playing_song_id} setPlayingSondId={this.setPlayingSondId}/>
                                 </div>
                             </div>
                         </div>
