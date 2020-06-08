@@ -119,7 +119,6 @@ export class Track extends Component {
                     <div className="track-options-div dropdown show">
                         <strong className="track-options" id="trackdropdownMenuButton" data-toggle="dropdown"></strong>
                         <div className="dropdown-menu" aria-labelledby="albumdropdownMenuLink">
-                            <a className="dropdown-item disabled" href="#">Save to Your Liked Songs</a>
 
                             <li className='dropdown-item '>
                                <button type="button" id="create-playlist" data-toggle="modal" data-target="#AddSongToPlaylist">

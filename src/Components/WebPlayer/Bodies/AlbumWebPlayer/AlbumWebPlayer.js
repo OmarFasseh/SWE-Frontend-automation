@@ -19,7 +19,7 @@ import { responseHandler } from '../../../../ReduxStore/Shared.js'
 export class AlbumWebPlayer extends Component {
     static contextType=ConfigContext;
 
-    static audio=new Audio();
+    audio=new Audio();
     state={
         /**
          * ID of the album
@@ -683,9 +683,8 @@ export class AlbumWebPlayer extends Component {
                                                 <div className="album-dots-div dropdown show" >
                                                     <p className="album-dots" id="albumdropdownMenuButton" data-toggle="dropdown" title="More">...</p>
                                                     <div className="dropdown-menu" aria-labelledby="albumdropdownMenuLink">
-                                                        <a className="dropdown-item" href="#" onClick={this.likeButtonPressed}>{this.state.is_liked? 'Remove from Your Library' : 'Save to Your Library'}</a>
                                                         <li className='dropdown-item '>
-                                                            <button type="button" id="create-playlist" data-toggle="modal" data-target="#AddSongToPlaylist" onClick={this.likeButtonPressed}>
+                                                            <button type="button" id="create-playlist" onClick={this.likeButtonPressed}>
                                                                 <span className='list-item-text'>{this.state.is_liked? 'Remove from Your Library' : 'Save to Your Library'}</span>
                                                             </button>
                                                         </li>
