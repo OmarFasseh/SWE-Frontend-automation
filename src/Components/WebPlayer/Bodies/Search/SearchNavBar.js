@@ -203,8 +203,13 @@ class SearchNavBar extends Component {
               axios.get(this.context.baseURL+"/search?q="+event+"&limit=10")
               .then(res => {
                 console.log("res status: ",res.status);
+                
                 if(res.status===200)
                 {   
+                    console.log("res: ",res);
+                    console.log("res.data: ",res.data);
+                    console.log("res.data.data: ",res.data.data);
+                    console.log("response.data.data.results:",res.data.data.results);
                     console.log("response of search (total):",res.data.data.results.total);
                     console.log("response of search (items):",res.data.data.results.items);
                     this.setState({
