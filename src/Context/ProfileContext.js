@@ -32,14 +32,15 @@ class ProfileContextProvider extends Component {
              //GET 
             axios.get(this.context.baseURL+'/me',{headers:{'authorization': "Bearer "+ localStorage.getItem("token"),}
             }).then(res => {
+                console.log(res);
                 if(res.status===200)
                 {
                     this.setState({user: res.data})
                     localStorage.setItem("userType",res.data.role);
                       
                     
-                }else
-            alert(res.status)
+                }else{}
+           // alert(res.status)
         
     }).catch(err => {
                 alert(err)
