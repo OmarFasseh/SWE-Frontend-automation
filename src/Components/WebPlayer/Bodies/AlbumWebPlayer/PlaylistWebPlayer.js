@@ -154,10 +154,11 @@ export class PlaylistWebPlayer extends Component {
 
     componentDidMount(){
 
-        const{myId}=this.props.location.state.myId;//getting id from parent component
-        const{myhref}=this.props.location.state.myhref;
+        const{myId}=this.props.location.state;//getting id from parent component
+        const{myhref}=this.props.location.state;
         this.state.myId=myId;
         console.log("myid: "+myId);
+        console.log("myhref: "+myhref);
         this.state.myhref=myhref;
         this.getPlaylistDetails();
         this.getPlaylistTracks();
