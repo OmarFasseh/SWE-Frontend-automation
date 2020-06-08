@@ -699,7 +699,7 @@ export class PlaylistWebPlayer extends Component {
                     </div>
                 </div>
                 <div className="row">
-                        <PlayingBar playlist_image={this.state.playlist_image} id={this.state.playing_song_id} name={this.state.playing_song_name} artist={this.state.playing_song_artist} minutes={this.state.playing_song_minutes} 
+                        <PlayingBar album_image={this.state.playlist_image} id={this.state.playing_song_id} name={this.state.playing_song_name} artist={this.state.playing_song_artist} minutes={this.state.playing_song_minutes} 
                         seconds={this.state.playing_song_seconds} is_playing={this.state.is_playing} current_minutes={this.state.playing_song_current_minutes} current_seconds={this.state.playing_song_current_seconds}
                         setPlayerVolume={this.setPlayerVolume} seekSong={this.seekSong} PlayPauseButtonPressed={this.PlayPauseButtonPressed} nextSong={this.nextSong} previousSong={this.previousSong} 
                         is_repeating={this.state.is_repeating} repeatButtonPressed={this.repeatButtonPressed} is_shuffling={this.state.is_shuffling} shuffleButtonPressed={this.shuffleButtonPressed} 
