@@ -238,8 +238,6 @@ export class AlbumWebPlayer extends Component {
         })
         .then(res => {
             if(res.status===200){
-                console.log("Album details")
-                console.log(res)
                 this.setState({tracks:res.data.data.tracksArray})
                 console.log("tracks");
                 console.log(res);
@@ -296,9 +294,12 @@ export class AlbumWebPlayer extends Component {
             })
         }
         else{
-            axios.delete(this.context.baseURL+"/me/unlikeAlbum",{"id":this.state.myId},{
+            axios.delete(this.context.baseURL+"/me/unlikeAlbum",{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
+                },
+                data:{
+                    "id": this.state.myId
                 }
             })
             .then(res => {
@@ -341,9 +342,12 @@ export class AlbumWebPlayer extends Component {
             })
         }
         else if(this.state.playing_song_id !== ""){
-            axios.delete(this.context.baseURL+"/me/unlikeTrack",{"id":this.state.playing_song_id},{
+            axios.delete(this.context.baseURL+"/me/unlikeTrack",{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
+                },
+                data:{
+                    "id": this.state.playing_song_id
                 }
             })
             .then(res => {
