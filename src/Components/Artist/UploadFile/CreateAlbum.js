@@ -16,7 +16,9 @@ const CreateAlbum = (props) => {
   const url = useContext(ConfigContext);
   const user = useContext(ProfileContext);
   console.log(props);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   /**Album name
    * @memberof CreateAlbum
    * @constant albumName
@@ -133,6 +135,7 @@ const CreateAlbum = (props) => {
         });
        if(res.status===200){
          setMessage("Album edited");
+         window.location.replace("/artist");
        }
       } catch (err) {
         console.log(err);
@@ -148,6 +151,7 @@ const CreateAlbum = (props) => {
         });
         if(res.status===200){
         setMessage("Album created");
+        window.location.replace("/artist");
       }
       } catch (err) {
         console.log(err);
@@ -163,6 +167,7 @@ const CreateAlbum = (props) => {
       });
       if(res.status===200){
       setMessage("Album deleted");
+      window.location.replace("/artist");
       }
     } catch (err) {
       console.log(err);

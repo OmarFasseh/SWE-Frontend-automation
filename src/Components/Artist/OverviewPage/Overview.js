@@ -9,42 +9,45 @@ import "../ArtistBody.css";
 import { Doughnut, Line, defaults,Chart } from "react-chartjs-2";
 import "./Overview.css";
 
-var  numberOfLikesYears={
-  labels:[],
-  data:[]
-}
-var  numberOfLikesMonths={
-  labels:[],
-  data:[]
-}
-var numberOfLikesDays={
-  labels:[],
-  data:[]
-}
-
-/** Class of Albums of artist. It gets the albums of the artist in the artist mode
+/** Class of Overview of artist. It gets the artist's info
  * @extends Component
  */
 class Overview extends Component {
+   /**Gets the baseURL from configrations context of the user
+   * @memberof Overview
+   */
   static contextType = ConfigContext;
-  static styleOfGraph={
 
-  };
   
   constructor() {
     super();
     this.state = {
       user: {
+      /**Array of Albums of the artist
+       * @memberof Overview
+       * @type {image}
+       */
         image: "",
       },
+      /**Number Of Likes And Followers per Year for an artist
+       * @memberof Overview
+       */
       numberOfLikesAndFollowersLineDataYears: {
+      /**Labels of Number Of Likes And Followers per Year for an artist
+       * @memberof Overview
+       * @type {Array<string>}
+       */
         labels: [],
+       /**Data for Number Of Likes And Followers per Year for an artist
+       * @memberof Overview
+       * @type {Array<settings>}
+       */
         datasets: [
           {
             label: "Likes",
-            fill: false,
+            fill: true,
             lineTension: 0.3,
-            backgroundColor: "rgba(75,192,192,0.4)",
+            backgroundColor: "rgba(40,255,50,0.1)",
             borderColor: "rgb(40, 255, 50)",
             borderCapStyle: "butt",
             borderDash: [],
@@ -62,9 +65,9 @@ class Overview extends Component {
             data: [],
           }, {
             label: "Followers",
-            fill: false,
+            fill: true,
             lineTension: 0.3,
-            backgroundColor: "rgba(75,192,192,0.4)",
+            backgroundColor: "rgba(255,205,40,0.1)",
             borderColor: "rgb(255, 205, 40)",
             borderCapStyle: "butt",
             borderDash: [],
@@ -83,8 +86,19 @@ class Overview extends Component {
           }
         ],
       },
+      /**Number Of Likes And Followers per month for an artist
+       * @memberof Overview
+       */
       numberOfLikesAndFollowersLineDataMonths: {
+      /**Labels of Number Of Likes And Followers per month for an artist
+       * @memberof Overview
+       * @type {Array<string>}
+       */
         labels: [],
+        /**Data for Number Of Likes And Followers per month for an artist
+       * @memberof Overview
+       * @type {Array<settings>}
+       */
         datasets: [
           {
             label: "Likes",
@@ -129,14 +143,25 @@ class Overview extends Component {
           }
         ],
       },
+      /**Number Of Likes And Followers per day for an artist
+       * @memberof Overview
+       */
       numberOfLikesAndFollowersLineDataDays: {
+      /**Labels of Number Of Likes And Followers per day for an artist
+       * @memberof Overview
+       * @type {Array<string>}
+       */
         labels: [],
+       /**Data for Number Of Likes And Followers per day for an artist
+       * @memberof Overview
+       * @type {Array<settings>}
+       */
         datasets: [
           {
             label: "Likes",
-            fill: false,
+            fill: true,
             lineTension: 0.3,
-            backgroundColor: "rgba(75,192,192,0.4)",
+            backgroundColor: "rgba(22,69,224,0.1)",
             borderColor: "rgb(22, 69, 224)",
             borderCapStyle: "butt",
             borderDash: [],
@@ -154,9 +179,9 @@ class Overview extends Component {
             data: [],
           }, {
             label: "Followers",
-            fill: false,
+            fill: true,
             lineTension: 0.3,
-            backgroundColor: "rgba(75,192,192,0.4)",
+            backgroundColor: "rgba(224,22,207,0.1)",
             borderColor: "rgb(224, 22, 207)",
             borderCapStyle: "butt",
             borderDash: [],
@@ -175,20 +200,48 @@ class Overview extends Component {
           }
         ],
       },
-     
+      pageTitle:"Artist Statistics",
+      pageLoaded: false,
     };
 
   }
   
- 
+   /**When the component mounts it sends a request to the backend to load number of followers and likes per (day/month/year)
+   * @memberof Overview
+   */
   componentDidMount() {
+    window.scrollTo(0, 0);
+
     console.log(this.state.fileName);
     console.log(this.context.baseURL);
-  
+    var albumId;
+    var trackId;
+    var endPoint="";
+    var flag=0;
+    try {
+      
+       albumId = this.props.location.state.albumId;
+       flag=1;
+       trackId = this.props.location.state.trackId;
 
-    //console.log(this.state.numberOfLikesAndFollowrsLineDataYears);
+       if(trackId===undefined)
+       {
+         endPoint="/albums/"+albumId;
+         this.state.pageTitle="Album Statistics"
+         console.log(endPoint);
+       }  
+       else
+       {
+         endPoint="/albums/"+albumId+"/tracks/"+trackId;
+         this.state.pageTitle="Track Statistics"
+
+       } 
+    } catch (error) {
+    }
+    console.log(endPoint);
+   // this.context.baseURL
     axios
-      .get(this.context.baseURL+"/meArtist/numberOfLikesAndFollowers", {
+      .get("https://spotify.mocklab.io"+"/me/numberOfLikesAndFollowers"+endPoint, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -212,6 +265,8 @@ class Overview extends Component {
           user: {
             ...prevState.user,
           },
+          pageLoaded:true,
+
         }));
       });
 
@@ -227,9 +282,11 @@ class Overview extends Component {
         <div id="artist-audience" className="container page-container">
           <div className="row">
             <ArtistSidebar/>
+            {this.state.pageLoaded ? 
             <div className="col-lg-9 col-sm-12 statistics-section">
               <div className="statistics-div">
-                <div className="statistics-info">
+            <h1 className="text-light text-center mt-5">{this.state.pageTitle}</h1>
+                <div className="statistics-info mb-5">
                   <h3 className="graph-title display-5 text-light mt-5 text-center">Number of likes and followers per year</h3>
                   <Line id="lineChart" data={this.state.numberOfLikesAndFollowersLineDataYears} />
                   <h3 className="graph-title display-5 text-light mt-5 text-center">Number of likes and followers per month</h3>
@@ -239,6 +296,12 @@ class Overview extends Component {
                 </div>
               </div>
             </div>
+            : 
+            <div className="container w-50 pb-5 align-middle align-self-center d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+              </div>}
           </div>
         </div>
       </div>

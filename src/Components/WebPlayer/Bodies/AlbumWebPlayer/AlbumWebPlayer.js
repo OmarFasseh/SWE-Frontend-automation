@@ -18,7 +18,7 @@ import { responseHandler } from '../../../../ReduxStore/Shared.js'
  */
 export class AlbumWebPlayer extends Component {
     static contextType=ConfigContext;
-
+    
     audio=new Audio();
     state={
         /**
@@ -57,8 +57,14 @@ export class AlbumWebPlayer extends Component {
          * @memberof AlbumWebPlayer
          * @type {Boolean}
          */
-        "is_liked":Boolean,
+        "is_liked":false,
         ///////////////////////////////////////////////////
+        /**
+         * Array of liked tracks' ids
+         * @memberof AlbumWebPlayer 
+         * @type {Array<String>}
+         */
+        "liked_tracks":[],
         /**
          * Total number of tracks in the album
          * @memberof AlbumWebPlayer
@@ -83,6 +89,12 @@ export class AlbumWebPlayer extends Component {
          * @type {String}
          */
         "playing_song_name":"",
+        /**
+         * if playing song is liked or not
+         * @memberof AlbumWebPlayer
+         * @type {Boolean}
+         */
+        "playing_song_is_liked":false,
         /**
          * Artist of the playing song
          * @memberof AlbumWebPlayer
@@ -140,12 +152,16 @@ export class AlbumWebPlayer extends Component {
     }
 
     componentDidMount(){
-      
+        window.scrollTo(0, 0);
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
         console.log(this.state.myId)
         this.getAlbumDetails();
         this.getAlbumTracks();
+
+    }
+    componentWillUnmount(){
+        this.audio.pause();
     }
 
     /**
@@ -154,8 +170,9 @@ export class AlbumWebPlayer extends Component {
     */
     getAlbumDetails(){
         //this.context.baseURL+"/albums/"+this.state.myId
-        //http://spotify.mocklab.io/albums/12345
-        axios.get(this.context.baseURL+"/albums/"+this.state.myId,{
+        //"http://spotify.mocklab.io/albums/12345"
+        var link = this.context.baseURL+"/albums/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
+        axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -169,14 +186,37 @@ export class AlbumWebPlayer extends Component {
                 this.setState({
                     album_image:res.data.data.album.image,
                     album_name:res.data.data.album.name,
-                    album_total_tracks:res.data.data.album.totalTracks,
-                    is_liked:false //get from backend
+                    album_total_tracks:res.data.data.album.totalTracks
                 })
                 res.data.data.album.artists.map((artist)=>(
                     this.setState({
                         artists:artist.name
                     })
                 ))
+            }
+            else responseHandler(res);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+        //check if album is liked
+        axios.get(this.context.baseURL+"/me/likedAlbums",{
+            headers:{
+                'Content-Type':'application/json',
+                'authorization': "Bearer "+ localStorage.getItem("token")
+            }
+        })
+        .then(res => {
+            if(res.status===200){
+                res.data.data.albums.map((album) => {
+                    if(album._id === this.state.myId){
+                        this.setState({
+                            is_liked:true
+                        })
+                        return album;
+                    }
+                })
             }
             else responseHandler(res);
         })
@@ -192,7 +232,8 @@ export class AlbumWebPlayer extends Component {
     getAlbumTracks(){
         //this.context.baseURL+"/albums/"+this.state.myId+"/tracks"
         //"http://spotify.mocklab.io/albums/12345/tracks"
-        axios.get(this.context.baseURL+"/albums/"+this.state.myId+"/tracks",{
+        var link = this.context.baseURL+"/albums/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
+        axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -201,8 +242,6 @@ export class AlbumWebPlayer extends Component {
         })
         .then(res => {
             if(res.status===200){
-                console.log("Album details")
-                console.log(res)
                 this.setState({tracks:res.data.data.tracksArray})
                 console.log("tracks");
                 console.log(res);
@@ -212,6 +251,26 @@ export class AlbumWebPlayer extends Component {
         .catch(error => {
            console.log(error);
         })
+
+        //gets array of liked tracks' ids
+        axios.get(this.context.baseURL+"/me/likedTracks",{
+            headers:{
+                'Content-Type':'application/json',
+                'authorization': "Bearer "+ localStorage.getItem("token")
+            }
+        })
+        .then(res => {
+            if(res.status===200){
+                res.data.data.tracks.map((track) => (
+                    this.state.liked_tracks.push(track._id)
+                ))
+                console.log("liked tracks: "+this.state.liked_tracks);
+            }
+            else responseHandler(res);
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
 
     /**
@@ -220,17 +279,17 @@ export class AlbumWebPlayer extends Component {
      * @return {void}
      */
     likeButtonPressed=()=>{
-        if(this.state.is_liked){
-            axios.put("http://spotify.mocklab.io/me/likeAlbum",{body:{"id":this.state.myId}},{
+        if(!this.state.is_liked){
+            axios.put(this.context.baseURL+"/me/likeAlbum",{"id":this.state.myId},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
             })
             .then(res => {
                 if(res.status===204){
-                    this.setState(prevState =>({
-                        is_liked:!prevState.is_liked
-                    }))
+                    this.setState({
+                        is_liked:true
+                    })
                 }
                 else responseHandler(res);
             })
@@ -239,21 +298,74 @@ export class AlbumWebPlayer extends Component {
             })
         }
         else{
-            axios.delete("http://spotify.mocklab.io/me/unlikeAlbum",{body:{"id":this.state.myId}},{
+            axios.delete(this.context.baseURL+"/me/unlikeAlbum",{
+                headers:{
+                    'authorization': "Bearer "+ localStorage.getItem("token"),
+                },
+                data:{
+                    "id": this.state.myId
+                }
+            })
+            .then(res => {
+                if(res.status===204){
+                    this.setState({
+                        is_liked:false
+                    })
+                }
+                else responseHandler(res);
+            })
+            .catch(error => {
+            console.log(error);
+            })
+        }
+    }
+
+    /**
+     * toggles playing_song_is_liked and sends request to backend
+     * @memberof AlbumWebPlayer
+     */
+    trackLikeButtonPressed=()=>{
+        if(!this.state.playing_song_is_liked && this.state.playing_song_id !== ""){
+            axios.put(this.context.baseURL+"/me/likeTrack",{"id":this.state.playing_song_id},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
             })
             .then(res => {
                 if(res.status===204){
-                    this.setState(prevState =>({
-                        is_liked:!prevState.is_liked
-                    }))
+                    this.setState({
+                        playing_song_is_liked:true
+                    })
+                    this.state.liked_tracks.push(this.state.playing_song_id);
+                    console.log("new liked tracks: "+this.state.liked_tracks);
                 }
                 else responseHandler(res);
             })
             .catch(error => {
-            console.log(error);
+            alert(error.response.data.message);
+            })
+        }
+        else if(this.state.playing_song_id !== ""){
+            axios.delete(this.context.baseURL+"/me/unlikeTrack",{
+                headers:{
+                    'authorization': "Bearer "+ localStorage.getItem("token"),
+                },
+                data:{
+                    "id": this.state.playing_song_id
+                }
+            })
+            .then(res => {
+                if(res.status===204){
+                    this.setState(prevState =>({
+                        playing_song_is_liked:false,
+                        liked_tracks:prevState.liked_tracks.filter(e => e !== prevState.playing_song_id)
+                    }))
+                    console.log("new liked tracks: "+this.state.liked_tracks);
+                }
+                else responseHandler(res);
+            })
+            .catch(error => {
+            alert(error.response.data.message);
             })
         }
     }
@@ -294,11 +406,25 @@ export class AlbumWebPlayer extends Component {
                 playing_song_number:number,
                 playing_song_name:name,
                 playing_song_artist:artist,
-                playing_song_minutes:minutes,
-                playing_song_seconds:seconds,
+                playing_song_is_liked:this.state.liked_tracks.includes(id),
                 is_playing:true
             })
-            this.audio.src=url;
+            ////////////to avoid integeration conflict/////////////
+            if(url === undefined){  
+                this.audio.src = "https://nogomistars.com/Online_Foldern/Amr_Diab/Sahraan/Nogomi.com_Amr_Diab-02.Sahran.mp3";
+                this.setState({
+                    playing_song_minutes:4,
+                    playing_song_seconds:46
+                })
+            }
+            else{
+                this.audio.src = url;
+                this.setState({
+                    playing_song_minutes:minutes,
+                    playing_song_seconds:seconds
+                })
+            }
+            ///////////////////////////////////////////////////////
             this.audio.play();
         }
     }
@@ -314,14 +440,17 @@ export class AlbumWebPlayer extends Component {
             this.setState({
                 is_playing:false,
                 playing_song_id:"",
-                playing_song_number:0,
+                playing_song_name:"",
+                playing_song_artist:"",
+                playing_song_is_liked:false,
+                playing_song_number:0
             })
             this.audio.pause();
             this.audio.src="";
         }
         else{
             var currentNum = this.state.playing_song_number;
-            if(this.state.is_shuffling){
+            if(this.state.is_shuffling && this.state.album_total_tracks !== 1){
                 currentNum = Math.floor(Math.random() * this.state.album_total_tracks);
                 while(currentNum + 1 === this.state.playing_song_number){
                     currentNum = Math.floor(Math.random() * this.state.album_total_tracks);
@@ -337,11 +466,27 @@ export class AlbumWebPlayer extends Component {
                         playing_song_id: track._id,
                         playing_song_name: track.name,
                         playing_song_number: track.trackNumber,
-                        playing_song_minutes: Math.floor(track.durationMs / 60000),
-                        playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0),
+                        playing_song_is_liked:this.state.liked_tracks.includes(track._id),
                         is_playing:true
                     })
-                    this.audio.src=track.preview_url;
+
+                    ////////////to avoid integeration conflict/////////////
+                    if(track.preview_url === undefined){  
+                        this.audio.src = "https://nogomistars.com/Online_Foldern/Amr_Diab/Sahraan/Nogomi.com_Amr_Diab-02.Sahran.mp3";
+                        this.setState({
+                            playing_song_minutes:4,
+                            playing_song_seconds:46
+                        })
+                    }
+                    else{
+                        this.audio.src=track.preview_url;
+                        this.setState({
+                            playing_song_minutes: Math.floor(track.durationMs / 60000),
+                            playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0)
+                        })
+                    }
+                    ///////////////////////////////////////////////////////
+
                     this.audio.play();
                     return track;
                 }
@@ -359,6 +504,9 @@ export class AlbumWebPlayer extends Component {
             this.setState({
                 is_playing:false,
                 playing_song_id:"",
+                playing_song_name:"",
+                playing_song_artist:"",
+                playing_song_is_liked:false,
                 playing_song_number:this.state.album_total_tracks+1
             })
             this.audio.pause();
@@ -366,7 +514,7 @@ export class AlbumWebPlayer extends Component {
         }
         else{
             var currentNum = this.state.playing_song_number;
-            if(this.state.is_shuffling){
+            if(this.state.is_shuffling && this.state.album_total_tracks !== 1){
                 currentNum = Math.floor(Math.random() * (this.state.album_total_tracks + 2) );
                 while((currentNum - 1 === this.state.playing_song_number) | (currentNum - 1 <= 0)){
                     currentNum = Math.floor(Math.random() * (this.state.album_total_tracks + 2) );
@@ -382,11 +530,27 @@ export class AlbumWebPlayer extends Component {
                         playing_song_id: track._id,
                         playing_song_name: track.name,
                         playing_song_number: track.trackNumber,
-                        playing_song_minutes: Math.floor(track.durationMs / 60000),
-                        playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0),
+                        playing_song_is_liked:this.state.liked_tracks.includes(track._id),
                         is_playing:true
                     })
-                    this.audio.src=track.preview_url;
+
+                    ////////////to avoid integeration conflict/////////////
+                    if(track.preview_url === undefined){  
+                        this.audio.src = "https://nogomistars.com/Online_Foldern/Amr_Diab/Sahraan/Nogomi.com_Amr_Diab-02.Sahran.mp3";
+                        this.setState({
+                            playing_song_minutes:4,
+                            playing_song_seconds:46
+                        })
+                    }
+                    else{
+                        this.audio.src=track.preview_url;
+                        this.setState({
+                            playing_song_minutes: Math.floor(track.durationMs / 60000),
+                            playing_song_seconds: ((track.durationMs % 60000) / 1000).toFixed(0)
+                        })
+                    }
+                    ///////////////////////////////////////////////////////
+                    
                     this.audio.play();
                     return track;
                 }
@@ -500,7 +664,7 @@ export class AlbumWebPlayer extends Component {
                            <div className="row">
                                 <div className="row album-details-div">
                                     <div className="album-image-div">
-                                        <img className="album-image" src={TrackImage} alt="album pic"/>   {/*this.state.album_image*/}
+                                        <img className="album-image" src={this.state.album_image} alt="album pic"/>
                                     </div>
                                     <div className="album-below-image-div">
                                         <div className="album-title-div">
@@ -529,11 +693,11 @@ export class AlbumWebPlayer extends Component {
                                                 <div className="album-dots-div dropdown show" >
                                                     <p className="album-dots" id="albumdropdownMenuButton" data-toggle="dropdown" title="More">...</p>
                                                     <div className="dropdown-menu" aria-labelledby="albumdropdownMenuLink">
-                                                        <a className="dropdown-item disabled" href="#">Start Radio</a>
-                                                        <a className="dropdown-item disabled" href="#">Save to Your Library</a>
-                                                        <a className="dropdown-item disabled" href="#">Add to PLaylist</a>
-                                                        <a className="dropdown-item disabled" href="#">Copy Album Link</a>
-                                                        <a className="dropdown-item disabled" href="#">Open in Desktop app</a>
+                                                        <li className='dropdown-item '>
+                                                            <button type="button" id="create-playlist" onClick={this.likeButtonPressed}>
+                                                                <span className='list-item-text'>{this.state.is_liked? 'Remove from Your Library' : 'Save to Your Library'}</span>
+                                                            </button>
+                                                        </li>
                                                     </div>
                                                 </div>
                                             </div>                                                
@@ -549,10 +713,11 @@ export class AlbumWebPlayer extends Component {
                     </div>
                 </div>
                 <div className="row">
-                        <PlayingBar id={this.state.playing_song_id} name={this.state.playing_song_name} artist={this.state.playing_song_artist} minutes={this.state.playing_song_minutes} 
+                        <PlayingBar album_image={this.state.album_image} id={this.state.playing_song_id} name={this.state.playing_song_name} artist={this.state.playing_song_artist} minutes={this.state.playing_song_minutes} 
                         seconds={this.state.playing_song_seconds} is_playing={this.state.is_playing} current_minutes={this.state.playing_song_current_minutes} current_seconds={this.state.playing_song_current_seconds}
                         setPlayerVolume={this.setPlayerVolume} seekSong={this.seekSong} PlayPauseButtonPressed={this.PlayPauseButtonPressed} nextSong={this.nextSong} previousSong={this.previousSong} 
-                        is_repeating={this.state.is_repeating} repeatButtonPressed={this.repeatButtonPressed} is_shuffling={this.state.is_shuffling} shuffleButtonPressed={this.shuffleButtonPressed} />
+                        is_repeating={this.state.is_repeating} repeatButtonPressed={this.repeatButtonPressed} is_shuffling={this.state.is_shuffling} shuffleButtonPressed={this.shuffleButtonPressed} 
+                        playing_song_is_liked={this.state.playing_song_is_liked} trackLikeButtonPressed={this.trackLikeButtonPressed} />
                 </div>
             </div>
         )
