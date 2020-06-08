@@ -4,7 +4,6 @@ import { Route } from 'react-router';
 import '../NavBars.css';
 import './SearchNavBar.css';
 import axios from 'axios'
-import { responseHandler } from '../../../../ReduxStore/Shared';
 
 import { ConfigContext } from '../../../../Context/ConfigContext'
 import { ProfileContext } from '../../../../Context/ProfileContext'
