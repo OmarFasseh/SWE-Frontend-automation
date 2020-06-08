@@ -157,6 +157,7 @@ export class PlaylistWebPlayer extends Component {
         const{myId}=this.props.location.state.myId;//getting id from parent component
         const{myhref}=this.props.location.state.myhref;
         this.state.myId=myId;
+        console.log("myid: "+myId);
         this.state.myhref=myhref;
         this.getPlaylistDetails();
         this.getPlaylistTracks();
@@ -171,6 +172,7 @@ export class PlaylistWebPlayer extends Component {
     */
     getPlaylistDetails(){
         var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
+        console.log("link1: "+link);
         axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
@@ -225,6 +227,7 @@ export class PlaylistWebPlayer extends Component {
     */
     getPlaylistTracks(){
         var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
+        console.log("link2: "+link);
         axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
