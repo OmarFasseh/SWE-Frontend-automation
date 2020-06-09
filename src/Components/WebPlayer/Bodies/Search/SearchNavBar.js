@@ -13,7 +13,6 @@ import { responseHandler, logout } from '../../../../ReduxStore/Shared';
  * @extends Component
  */
 class SearchNavBar extends Component {
-    static contextType=ConfigContext;
     constructor(){
         super()
         this.state={
@@ -183,66 +182,36 @@ class SearchNavBar extends Component {
         const element = document.getElementById("dropdownMenuLink");
         element.classList.toggle("toggle-background-color");
       }
-     
+      
       /**to switch between searching or not to know which page to  view
      * @type {Function}
      * @memberof SearchNavBar
      */
-    searchHandler(event){
+      searchHandler=(event)=>{
         this.setState({text:event});
-        //this.getTracks(event);
-        console.log("tracks in search handler :",this.state.tracks);
-        console.log("not found in search handler :",this.state.notFound);
-        console.log("text inside search handler : ",event);
+        console.log("text inside search handler : ",this.state.text);
         if(event==''){
+            this.state.searchingstate=false;
             document.getElementById("search-searching").classList.add("hide");
             document.getElementById("search-not-searching").classList.remove("hide");
             document.getElementById("search-not-found-searching").classList.add("hide");
             
         }
-        else{
-            //this.componentDidMount();    
-            //+"&limit=10"
-              /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-              console.log("base URL : ",this.context.baseURL);
-              axios.get(this.context.baseURL+"/search?q="+event)
-              .then(res => {
-                console.log("res status: ",res.status);
-                if(res.status===200)
-                {   
-                    console.log("res: ",res);
-                    console.log("res.data: ",res.data);
-                    console.log("res.data.data: ",res.data.data);
-                    console.log("response.data.data.results:",res.data.data.results);
-                    console.log("response of search (total):",res.data.data.results.total);
-                    console.log("response of search (items):",res.data.data.results.items);;
-                    this.setState({
-                        tracks:res.data.data.results.items,
-                        notFound:res.data.data.results.total
-                    },function(){
-                        console.log("state inside function:",this.state);
-                        
-                        console.log("response of search (notFound)function:",this.state.notFound);
-                        console.log("response of search (items)function:",this.state.tracks);
-                        if(this.state.notFound!=0){
-                            document.getElementById("search-not-searching").classList.add("hide");
-                            document.getElementById("search-searching").classList.remove("hide");
-                            document.getElementById("search-not-found-searching").classList.add("hide");
-                           /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
-                        }
-                        else if(this.state.notFound==0){
-                            document.getElementById("search-not-searching").classList.add("hide");
-                            document.getElementById("search-searching").classList.add("hide");
-                            document.getElementById("search-not-found-searching").classList.remove("hide");
-                        }
-                    })
-                    console.log("response of search (notFound):",this.state.notFound);
-                    console.log("response of search (items):",this.state.tracks);
-                }
-                else responseHandler(res);
-            })
-              
-              
+        else{    
+            this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
+            if(this.state.notFound!=0){
+                this.state.searchingstate=true;
+                document.getElementById("search-not-searching").classList.add("hide");
+                document.getElementById("search-searching").classList.remove("hide");
+                document.getElementById("search-not-found-searching").classList.add("hide");
+               /* this.componentDidMount();  /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
+            }
+            else if(this.state.notFound==0){
+                this.state.searchingstate=false;
+                document.getElementById("search-not-searching").classList.add("hide");
+                document.getElementById("search-searching").classList.add("hide");
+                document.getElementById("search-not-found-searching").classList.remove("hide");
+            }
         }
       }
     /**get all tracks of the album 

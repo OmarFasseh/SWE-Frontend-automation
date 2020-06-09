@@ -165,6 +165,7 @@ const CreateAlbum = (props) => {
           authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
+      console.log(res);
       if(res.status===200){
       setMessage("Album deleted");
       window.location.replace("/artist");

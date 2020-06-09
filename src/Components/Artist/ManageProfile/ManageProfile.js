@@ -107,14 +107,18 @@ class ManageProfile extends Component {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
+          try {
+          } catch (error) {
+            
+          }
           this.setState((prevState) => ({
             user: {
               ...prevState.user,
               image: res.data.images,
               name: res.data.name,
-             background:res.data.images,//"https://i.ytimg.com/vi/Yo1AZl1S2gc/maxresdefault.jpg",
+              background:"https://i.ytimg.com/vi/Yo1AZl1S2gc/maxresdefault.jpg",
               //background: res.data.artistInfo.background,
-              bio: res.data.artistInfo.biography,
+              bio: res.data.artistInfo.biography 
             },
             pageLoaded:true,
           }));
@@ -149,8 +153,8 @@ class ManageProfile extends Component {
   editProfile = () => {
     console.log(this.state.nameInput);
     console.log(this.state.bioInput);
-   
-      axios.put(this.context.baseURL+'/me', 
+    //this.context.baseURL+
+      axios.put('https://spotify.mocklab.io/me', 
       {
           "name": this.state.nameInput,
           "biography":this.state.bioInput
@@ -194,7 +198,8 @@ class ManageProfile extends Component {
     console.log(this.state.file);
     const formData = new FormData();
     formData.append("image", this.state.file);
-    axios.put(this.context.baseURL+'/me/image', 
+    //this.context.baseURL+
+    axios.put('https://spotify.mocklab.io/me/image', 
          formData
       ,
       {
