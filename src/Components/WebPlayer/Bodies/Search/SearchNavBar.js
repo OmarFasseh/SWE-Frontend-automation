@@ -205,12 +205,7 @@ class SearchNavBar extends Component {
             //+"&limit=10"
               /** if he is searching for something that is in DB then perform all requests , called each time the input string changed to fetch new data (perform new requests)*/
               console.log("base URL : ",this.context.baseURL);
-              axios.get(this.context.baseURL+"/search", {
-                params: {
-                  q: event,
-                  limit: 10
-                },
-              })
+              axios.get(this.context.baseURL+"/search?q="+event)
               .then(res => {
                 console.log("res status: ",res.status);
                 if(res.status===200)
