@@ -13,6 +13,7 @@ import { responseHandler, logout } from '../../../../ReduxStore/Shared';
  * @extends Component
  */
 class SearchNavBar extends Component {
+    static contextType=ConfigContext;
     constructor(){
         super()
         this.state={
