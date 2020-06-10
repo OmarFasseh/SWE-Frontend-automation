@@ -389,7 +389,7 @@ class Home extends Component {
             }) */
 
             //popular albums
-    axios.get("http://spotify.mocklab.io/genres", {
+    axios.get("https://spotify.mocklab.io/genres", {
       headers: {
         authorization: "Bearer " + localStorage.getItem("token"),
       },
