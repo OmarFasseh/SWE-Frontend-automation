@@ -207,7 +207,12 @@ class ArtistWebPlayer extends Component {
                 }
                 else responseHandler(res);
             })     
-            this.getAlbumTracks();    
+            try 
+            {
+                this.getAlbumTracks();   
+            }
+            catch (err) {
+              }
                                                 
     }
         /**get all tracks of the album 
