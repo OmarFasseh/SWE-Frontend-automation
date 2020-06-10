@@ -1,4 +1,4 @@
-importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js');
+/* importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js');
 
 
@@ -130,4 +130,4 @@ self.addEventListener('push', async function(event) {
   //self.addEventListener('message', function (evt) {     
     //console.log("self",self);
     //howMessage( evt.data );
-  //})
+  //}) */

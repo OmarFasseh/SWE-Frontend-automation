@@ -78,7 +78,6 @@ componentDidMount(){
                      image:recents.data.images[0]
                     })),
                    totalResults: res.data.data.results.total,
-                  
                    Loaded:true,
                 })
             }
@@ -187,14 +186,15 @@ render(){
                     <span class="notify-time">{recents.time}</span>
 				</div>
 			</div>
-        ))}</div> :
+        ))} 
+        {this.state.totalResults>4? <Pagination pages={numberPages} nextpage={this.nextpage} currentPage={this.state.currentPage}/> : ''}
+        </div>:
         <div className="container w-50 pb-5 align-middle align-self-center d-flex justify-content-center">
                                 <div class="spinner-border text-success" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
                              }
-        {this.state.totalResults>4? <Pagination pages={numberPages} nextpage={this.nextpage} currentPage={this.state.currentPage}/> : ''}
            {/* {console.log(this.state.currentpage)}
         {console.log(numberPages)} */}
             </div>
