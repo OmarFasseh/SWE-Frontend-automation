@@ -19,6 +19,43 @@ import * as firebase from 'firebase';
   measurementId: "G-YDVW3R60NT"
 };
 firebase.initializeApp(config);
+const messaging = firebase.messaging();
+// Add the public key generated from the console here.
+messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
+messaging.requestPermission()
+  .then (function(){
+    console.log("Have permission");
+    return messaging.getToken();
+  })
+  .then(function(token){
+  console.log("token is "); 
+  console.log(token);
+         axios.put("https://totallynotspotify.codes/api/me/notifications/token",
+          {
+            "token":token,
+            "type":"web"
+            },
+             {
+            headers: {
+              authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then(res => {
+            console.log(res)
+         if(res.status===204){
+            console.log("Request Succesful and token is ", token)
+        }
+      })
+      .catch(res => {
+        console.log(res)
+      })
+  })
+.catch(function(err){
+  console.log("error occured")
+})
+messaging.onMessage((payload) => {
+ console.log('Message received. ', payload);
+});
 
 
 /**
@@ -61,44 +98,6 @@ constructor(){
    * 
    */
 componentDidMount(){
-    const messaging = firebase.messaging();
-// Add the public key generated from the console here.
-messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
-messaging.requestPermission()
-  .then (function(){
-    console.log("Have permission");
-    return messaging.getToken();
-  })
-  .then(function(token){
-  console.log("token is "); 
-  console.log(token);
-         axios.put("https://totallynotspotify.codes/api/me/notifications/token",
-          {
-            "token":token,
-            "type":"web"
-            },
-             {
-            headers: {
-              authorization: "Bearer " + localStorage.getItem("token"),
-            },
-          })
-          .then(res => {
-            console.log(res)
-         if(res.status===204){
-            console.log("Request Succesful and token is ", token)
-        }
-      })
-      .catch(res => {
-        console.log(res)
-      })
-  })
-.catch(function(err){
-  console.log("error occured")
-})
-messaging.onMessage((payload) => {
- console.log('Message received. ', payload);
-});
-
     axios.get(this.context.baseURL +'/me/notifications?limit=4',
     {
        headers:{'authorization':"Bearer "+localStorage.getItem('token')},
