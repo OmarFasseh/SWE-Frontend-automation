@@ -59,7 +59,7 @@ export class PlaylistWebPlayer extends Component {
          * @memberof PlaylistWebPlayer
          * @type {Boolean}
          */
-        "is_liked":Boolean,
+        "is_liked":false,
         /**
          * Array of liked tracks' ids
          * @memberof PlaylistWebPlayer 
@@ -150,6 +150,7 @@ export class PlaylistWebPlayer extends Component {
          * @type {Boolean}
          */
         "is_playing":false,
+        "pageLoaded": false
     }
 
     componentDidMount(){
@@ -172,8 +173,8 @@ export class PlaylistWebPlayer extends Component {
     * @memberof PlaylistWebPlayer
     */
     getPlaylistDetails(){
-        var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
-        axios.get(link,{
+        //var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
+        axios.get("https://spotify.mocklab.io/playlists/12345",{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -197,7 +198,7 @@ export class PlaylistWebPlayer extends Component {
         })
 
         //check if playlist is liked
-        axios.get(this.context.baseURL+"/me/likedPlaylists",{
+        axios.get("https://spotify.mocklab.io/me/likedPlaylists",{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token")
@@ -226,8 +227,8 @@ export class PlaylistWebPlayer extends Component {
     * @memberof PlaylistWebPlayer
     */
     getPlaylistTracks(){
-        var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
-        axios.get(link,{
+        //var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
+        axios.get("https://spotify.mocklab.io/playlists/12345/tracks",{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -238,7 +239,10 @@ export class PlaylistWebPlayer extends Component {
             if(res.status===200){
                 console.log("Playlist details")
                 console.log(res)
-                this.setState({tracks:res.data.data.tracksArray})
+                this.setState({
+                    tracks:res.data.data.tracksArray,
+                    pageLoaded:true
+                })
             }
             else responseHandler(res);
         })
@@ -247,7 +251,7 @@ export class PlaylistWebPlayer extends Component {
         })
 
         //gets array of liked tracks' ids
-        axios.get(this.context.baseURL+"/me/likedTracks",{
+        axios.get("https://spotify.mocklab.io/me/likedTracks",{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token")
@@ -273,7 +277,7 @@ export class PlaylistWebPlayer extends Component {
      */
     likeButtonPressed=()=>{
         if(!this.state.is_liked){
-            axios.put(this.context.baseURL+"/me/likePlaylist",{"id":this.state.myId},{
+            axios.put("https://spotify.mocklab.io/me/likePlaylist",{"id":this.state.myId},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
@@ -291,7 +295,7 @@ export class PlaylistWebPlayer extends Component {
             })
         }
         else{
-            axios.delete(this.context.baseURL+"/me/unlikePlaylist",{
+            axios.delete("https://spotify.mocklab.io/me/unlikePlaylist",{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 },
@@ -319,7 +323,7 @@ export class PlaylistWebPlayer extends Component {
      */
     trackLikeButtonPressed=()=>{
         if(!this.state.playing_song_is_liked && this.state.playing_song_id !== ""){
-            axios.put(this.context.baseURL+"/me/likeTrack",{"id":this.state.playing_song_id},{
+            axios.put("https://spotify.mocklab.io/me/likeTrack",{"id":this.state.playing_song_id},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
@@ -339,7 +343,7 @@ export class PlaylistWebPlayer extends Component {
             })
         }
         else if(this.state.playing_song_id !== ""){
-            axios.delete(this.context.baseURL+"/me/unlikeTrack",{
+            axios.delete("https://spotify.mocklab.io/me/unlikeTrack",{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 },
@@ -656,6 +660,7 @@ export class PlaylistWebPlayer extends Component {
                     <div className="col-lg-10">
                         <HomeNavBar/>
                         <div id="album-webplayer-main-div">
+                            {this.state.pageLoaded ? 
                             <div className="row">
                                 <div className="row album-details-div">
                                     <div className="album-image-div">
@@ -697,6 +702,12 @@ export class PlaylistWebPlayer extends Component {
                                     <TracksList tracks={this.state.tracks} is_playing={this.state.is_playing} playing_song_id={this.state.playing_song_id} setPlayingSondId={this.setPlayingSondId}/>
                                 </div>
                             </div>
+                            : 
+                            <div className="container w-50 pb-5 align-middle align-self-center d-flex justify-content-center">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
