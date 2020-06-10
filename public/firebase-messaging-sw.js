@@ -127,7 +127,7 @@ self.addEventListener('push', async function(event) {
      self.registration.showNotification(notificationTitle,notificationOptions); 
   }   
   messaging.setBackgroundMessageHandler(showMessage);
-  messaging.onMessage(showMessage);
+  //messaging.onMessage(showMessage);
   self.addEventListener('message', function (evt) {     
     console.log("self",self);
     showMessage( evt.data );
