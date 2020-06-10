@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import "../SideBar/ArtistSidebar";
 import ArtistSidebar from "../SideBar/ArtistSidebar";
-import { Link } from "react-router-dom";
+import { Link ,Redirect} from "react-router-dom";
 import { ConfigContext } from "../../../Context/ConfigContext";
 import { ProfileContext } from "../../../Context/ProfileContext";
 import ArtistHeading from "../ManageProfile/ArtistHeading";
@@ -17,8 +17,8 @@ class EditTrack extends Component {
    */
   static contextType = ConfigContext;
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       /**Album Id of the track
        * @memberof EditTrack
@@ -41,10 +41,15 @@ class EditTrack extends Component {
    * @memberof Albums
    */
   componentDidMount() {
-    this.state.albumId = this.props.location.state.albumId;
-    this.state.trackId = this.props.location.state.trackId;
-    console.log(this.state.albumId);
-    console.log(this.state.trackId);
+    window.scrollTo(0, 0);
+    try {
+      this.state.albumId = this.props.location.state.albumId;
+      this.state.trackId = this.props.location.state.trackId;
+      console.log(this.state.albumId);
+      console.log(this.state.trackId);
+    } catch (error) {
+      
+    }
   }
   /**Change name function which records the new name of the track
    * @memberof EditTrack
@@ -62,6 +67,7 @@ class EditTrack extends Component {
    * @type {Function}
    */
   onSubmit = () => {
+
     console.log(this.state.trackNewName);
     axios
       .patch(
@@ -83,6 +89,8 @@ class EditTrack extends Component {
         console.log(res);
         if (res.status === 200) {
           console.log("edited");
+          window.location.replace("/artist");
+
         }
       })
       .catch();
@@ -110,6 +118,7 @@ class EditTrack extends Component {
         console.log(res);
         if (res.status === 200) {
           console.log("deleted");
+          window.location.replace("/artist");
         }
       })
       .catch();

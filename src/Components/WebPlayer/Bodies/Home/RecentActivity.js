@@ -62,7 +62,7 @@ componentDidMount(){
                          * link to image of the notification item
                          * @type {link}
                          */
-                        image:recents.images[0]
+                        image:recents.images
                     })),
                     totalResults: res.total
                 })

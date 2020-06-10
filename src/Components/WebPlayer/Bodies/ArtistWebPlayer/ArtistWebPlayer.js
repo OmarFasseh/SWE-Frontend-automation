@@ -111,7 +111,7 @@ class ArtistWebPlayer extends Component {
      * @memberof ArtistWebPlayer
      */
     componentDidMount() {
-
+        window.scrollTo(0, 0);
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
 
@@ -207,7 +207,12 @@ class ArtistWebPlayer extends Component {
                 }
                 else responseHandler(res);
             })     
-            this.getAlbumTracks();    
+            try 
+            {
+                this.getAlbumTracks();   
+            }
+            catch (err) {
+              }
                                                 
     }
         /**get all tracks of the album 

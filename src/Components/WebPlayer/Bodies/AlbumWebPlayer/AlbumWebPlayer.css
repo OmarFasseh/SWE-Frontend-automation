@@ -30,7 +30,7 @@
 }
 
 #album-webplayer-main-div .album-details-div{
-    /* width : 25% ; */
+    width: 25% ;
     padding: 10px 30px;
     justify-content: center;
     display: inline;
@@ -162,6 +162,9 @@
 #album-webplayer-main-div .btn-success:hover{
     transform: scale(1.05) perspective(1px);
     background-color: rgb(38, 218, 98);
+}
+#album-webplayer-main-div .btn-success:focus{
+    outline: none;
 }
 #album-webplayer-main-div .play-btn::before{
     content: "PLAY";

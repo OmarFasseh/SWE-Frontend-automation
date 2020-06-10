@@ -8,6 +8,8 @@ import {ProfileContext} from '../../../Context/ProfileContext'
 import ArtistHeading from "../ManageProfile/ArtistHeading";
 import "./ManageProfile.css";
 import "../ArtistBody.css";
+import { responseHandler } from '../../../ReduxStore/Shared';
+
 /** Class of Manage profile of artist. It shows artist's info
  * @extends Component
  */
@@ -63,6 +65,8 @@ class ManageProfile extends Component {
        */
         bio: "",
       },
+      pageLoaded: false,
+
     };
   }
   /**Toggle the display of a div
@@ -70,15 +74,26 @@ class ManageProfile extends Component {
    * @type {Function}
    * @param claasPassed - Class did the action
    */
-  toggleDisplay(claasPassed) {
-    const page = document.getElementById("artist-manage-profile");
-    const nameContainer = page.querySelector(claasPassed);
-    nameContainer.classList.toggle("d-none");
+  toggleDisplay(claasPassed1,claasPassed2) {
+    try {
+      console.log(claasPassed1);
+      console.log(claasPassed2);
+      const page = document.getElementById("artist-manage-profile");
+      const nameContainer = page.querySelector(claasPassed1);
+      nameContainer.classList.toggle("d-none");
+      const nameContainer2 = page.querySelector(claasPassed2);
+      nameContainer2.classList.toggle("d-none");
+      
+    } catch (error) {
+      
+    }
   }
     /**Gets bio and background of the artist
    * @memberof ManageProfile
    */
   componentDidMount() {
+    window.scrollTo(0, 0);
+
     console.log(this.state.fileName);
     console.log(this.context);
     /*/me/albums */
@@ -92,14 +107,20 @@ class ManageProfile extends Component {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
+          try {
+          } catch (error) {
+            
+          }
           this.setState((prevState) => ({
             user: {
               ...prevState.user,
               image: res.data.images,
               name: res.data.name,
-              background: res.data.artistInfo.background,
-              bio: res.data.artistInfo.bio,
+              background:"https://i.ytimg.com/vi/Yo1AZl1S2gc/maxresdefault.jpg",
+              //background: res.data.artistInfo.background,
+              bio: res.data.artistInfo.biography 
             },
+            pageLoaded:true,
           }));
           console.log(this.state.user.image);
         }
@@ -115,14 +136,7 @@ class ManageProfile extends Component {
       nameInput: e.target.value,
     });
   };
-    /**Change name function which sends the request of changing the name
-   * @memberof ManageProfile
-   * @type {Function}
-   */
-  changeName = () => {
-    console.log(this.state.nameInput);
-  };
- /**Change Bio function which set the state with the new Bio
+  /**Change Bio function which set the state with the new Bio
    * @memberof ManageProfile
    * @type {Function}
    * @param e - Event happend
@@ -132,13 +146,39 @@ class ManageProfile extends Component {
       bioInput: e.target.value,
     });
   };
-    /**Change Bio function which sends the request of changing the Bio
+  /**Change Bio and name function which sends the request of changing the info
    * @memberof ManageProfile
    * @type {Function}
    */
-  changeBio = () => {
+  editProfile = () => {
+    console.log(this.state.nameInput);
     console.log(this.state.bioInput);
+    //this.context.baseURL+
+      axios.put('https://spotify.mocklab.io/me', 
+      {
+          "name": this.state.nameInput,
+          "biography":this.state.bioInput
+      },
+      {
+          headers: {
+              'authorization': "Bearer "+localStorage.getItem("token"),
+              "contentType": "application/json"
+          }
+      }
+      )   
+      .then(res => {
+        console.log(res);
+          if(res.status === 200)
+          {
+            window.location.reload();
+          }else
+          responseHandler(res);
+      })
+      .catch(res => {       
+        responseHandler(res);
+      })
   };
+
    /**Change background function which set the state with the new background
    * @memberof ManageProfile
    * @type {Function}
@@ -157,7 +197,28 @@ class ManageProfile extends Component {
   changeBackground = () => {
     console.log(this.state.file);
     const formData = new FormData();
-    formData.append("img", this.state.file);
+    formData.append("image", this.state.file);
+    //this.context.baseURL+
+    axios.put('https://spotify.mocklab.io/me/image', 
+         formData
+      ,
+      {
+          headers: {
+              'authorization': "Bearer "+localStorage.getItem("token"),
+              "contentType": "application/json"
+          }
+      }
+      )   
+      .then(res => {
+          if(res.status === 200)
+          {
+            window.location.reload();
+          }else
+          responseHandler(res);
+      })
+      .catch(res => {       
+        responseHandler(res);
+      })
   };
   render() {
     return (
@@ -166,6 +227,7 @@ class ManageProfile extends Component {
         <div className="full-page container albums-page artist-albums-page">
           <div className="row container">
             <ArtistSidebar img={this.state.user.image} />
+            {this.state.pageLoaded ? 
             <div className="col-lg-9 container top-section">
               <div className="bg-layer"></div>
               <div className="manage-profile-top block">
@@ -189,9 +251,9 @@ class ManageProfile extends Component {
                   <button
                     type="button"
                     className="btn btn-primary-outline w-100"
-                    onClick={() => this.toggleDisplay(".name-container")}
+                    onClick={() => this.toggleDisplay(".name-container",".bio-container")}
                   >
-                    Change Name
+                    Edit Profile
                   </button>
                   <button
                     type="button"
@@ -199,13 +261,6 @@ class ManageProfile extends Component {
                     onClick={() => this.toggleDisplay(".background-container")}
                   >
                     Edit Background
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary-outline w-100"
-                    onClick={() => this.toggleDisplay(".bio-container")}
-                  >
-                    Edit Biography
                   </button>
                 </div>
               </div>
@@ -221,18 +276,29 @@ class ManageProfile extends Component {
                     name="fullName"
                     onChange={this.changeNameText}
                   />
-                  <div className="">
-                    <button
-                      className="btn btn-primary-outline w-100"
-                      type="button"
-                      onClick={() => this.changeName()}
-                    >
-                      Submit
-                    </button>
-                  </div>
                 </div>
               </div>
 
+
+              <div className="d-none bio-container">
+                <div className="input-group  d-flex flex-column w-50 container mb-5 ">
+                  <div className="input-group-prepend">
+                    <textarea
+                      className="form-control"
+                      rows="7"
+                      aria-label="With textarea"
+                      onChange={this.changeBioText}
+                    ></textarea>
+                  </div>
+                  <button
+                    className="btn btn-primary-outline w-100"
+                    type="button"
+                    onClick={() => this.editProfile()}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
               <div className="container w-50 mt-5 mb-5 background-container d-none">
                 <div className="input-group d-flex flex-column">
                   <div className="custom-file">
@@ -261,27 +327,14 @@ class ManageProfile extends Component {
                   </div>
                 </div>
               </div>
-              <div className="d-none bio-container">
-                <div className="input-group  d-flex flex-column w-50 container mb-5 ">
-                  <div className="input-group-prepend">
-                    <textarea
-                      className="form-control"
-                      rows="7"
-                      aria-label="With textarea"
-                      onChange={this.changeBioText}
-                    ></textarea>
-                  </div>
-                  <button
-                    className="btn btn-primary-outline w-100"
-                    type="button"
-                    onClick={() => this.changeBio()}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
             </div>
-          </div>
+            : 
+            <div className="container w-50 pb-5 align-middle align-self-center d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>
+              </div>}
+         </div>
         </div>
       </div>
     );

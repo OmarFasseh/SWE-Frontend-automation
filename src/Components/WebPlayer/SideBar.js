@@ -47,6 +47,7 @@ class SideBar extends Component {
                         <div id='sidebar-list-header' className='sidebar-list-item-header'>PLAYLISTS</div>
                         <ul className='sidebar-list'>
                             <div id="create-modal">
+                                
                   <button type="button" id="create-playlist" data-toggle="modal" data-target="#static-back-drop">
                    <li className='sidebar-list-item '>
                    <i className='fas fa-plus-square' ></i>

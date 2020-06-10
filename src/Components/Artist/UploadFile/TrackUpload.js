@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext,useEffect  } from "react";
 import axios from "axios";
 import Message from "./Message";
 import "../UploadFile/UploadFile.css";
@@ -116,13 +116,16 @@ const TrackUpload = (props) => {
             );
           },
         }
-      );
+      )
+      console.log(res);
+      console.log(res.status);
 
       const { fileName, filePath } = res.data;
-
+      
       setUploadedFile({ fileName, filePath });
       setMessage("File uploaded");
     } catch (err) {
+      console.log(err);
       if (err.response.status === 500) {
         setMessage("There was a problem with the server");
       } else {
@@ -131,6 +134,9 @@ const TrackUpload = (props) => {
       responseHandler(err.response)
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   return (
     <div className="artist-body">
       <div className="full-page container upload-page">

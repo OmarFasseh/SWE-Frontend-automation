@@ -27,7 +27,13 @@ import './AddToPlaylist.css'
             * @extends MyPlaylists
             * @type {string}
             */
-            trackid:""
+            trackid:"",
+            /** Track Id 
+            * @extends MyPlaylists
+            * @type {bool}
+            */
+           loaded:false
+
         }
         this.handleClick= this.handleClick.bind(this)
     }
@@ -68,12 +74,15 @@ import './AddToPlaylist.css'
                           * 
                           */
                       imageUrl:playlists.images[0]
-                  }))
+                  })),
+                  loaded:true,
               }) } else 
               responseHandler(res);
-          }).catch((error) => {
-            alert(error.response.data.message);
+          }).catch(res=>{
+              console.log(res);
+              alert(res.response.data.message);
             }) 
+            
     }
 
        /**
@@ -103,14 +112,14 @@ import './AddToPlaylist.css'
                 )
             }
         })
-        .catch(error => {
-            console.log(error);
-            alert(error.response.data.message);
-        })
+        .catch(res=>{
+            console.log(res);
+            alert(res.response.data.message);
+          }) 
     }
 
 render() {
-    console.log("trackId:" ,this.props.trackId)
+    //console.log("trackId:" ,this.props.trackId)
   //  console.log("Addtoplaylist",this.state.trackid)
     return(
     <div>
@@ -125,14 +134,14 @@ render() {
 
         <div className="modal-header" id="playlist-modal-header">
         <h5 className="modal-title" id="modal-title">Add to Playlist</h5>
-  
      </div> 
 
       </div>
        
       <div className="modal-body" id="modal-body-share">
       <div className="row" >
-                     <div className="playlist-items-wrapper">
+              {this.state.loaded? 
+                <div className="playlist-items-wrapper">
                      {this.state.playlists.map(playlist => (
                                         <div className="playlist-item-wrapper"  id={playlist.id}  >
                                             <div className="playlist-index-img-background"  onClick={() => this.handleClick(playlist.id)}>
@@ -149,9 +158,8 @@ render() {
                                                     </div>
                                                 </div> 
                                             </div>
-                                        </div>   ))}
+                                        </div>)) }</div>:<div></div>  }  
 
-                 </div>
                  </div>
 
         

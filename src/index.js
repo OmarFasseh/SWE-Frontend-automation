@@ -1,4 +1,3 @@
-
 import React from "react";
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -12,7 +11,7 @@ import authReducer from './ReduxStore/Reducers/Auth';
 import thunk from 'redux-thunk';
 import * as firebase from 'firebase';
 
-var config = {
+  var config = {
   apiKey: "AIzaSyDstl21Iann4t-odVPIMFTXpI5ToD1jIC0",
   authDomain: "totally-not-spotify.firebaseapp.com",
   databaseURL: "https://totally-not-spotify.firebaseio.com",
@@ -22,8 +21,9 @@ var config = {
   appId: "1:262598048193:web:8eb027331acfe77f625740",
   measurementId: "G-YDVW3R60NT"
 };
-
 firebase.initializeApp(config);
+
+
 
 const messaging = firebase.messaging();
 // Add the public key generated from the console here.
@@ -34,11 +34,6 @@ messaging.requestPermission()
     return messaging.getToken();
   })
   .then(function(token){
-  //  messaging.updateUIForPushEnabled(token);
-  //messaging.sendSubscriptionToServer(token);
-   //    updateUIForPushEnabled(token);
-     // sendSubscriptionToServer(token);
-
   console.log("token is "); 
   console.log(token);
          axios.put("https://totallynotspotify.codes/api/me/notifications/token",
@@ -62,88 +57,11 @@ messaging.requestPermission()
       })
   })
 .catch(function(err){
-  alert(err);
+  console.log("error occured")
 })
-
-//   var config = {
-//   apiKey: "AIzaSyDstl21Iann4t-odVPIMFTXpI5ToD1jIC0",
-//   authDomain: "totally-not-spotify.firebaseapp.com",
-//   databaseURL: "https://totally-not-spotify.firebaseio.com",
-//   projectId: "totally-not-spotify",
-//   storageBucket: "totally-not-spotify.appspot.com",
-//   messagingSenderId: "262598048193",
-//   appId: "1:262598048193:web:8eb027331acfe77f625740",
-//   measurementId: "G-YDVW3R60NT"
-// };
-// firebase.initializeApp(config);
-
-
-
-// const messaging = firebase.messaging();
-// // Add the public key generated from the console here.
-// messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
-// messaging.requestPermission()
-//   .then (function(){
-//     console.log("Have permission");
-//     return messaging.getToken();
-//   })
-//   .then(function(token){
-//   //  messaging.updateUIForPushEnabled(token);
-//   //messaging.sendSubscriptionToServer(token);
-//   console.log("token is "); 
-//   console.log(token);
-//          axios.put("https://totallynotspotify.codes/api/me/notifications/token",
-//           {
-//             "token":token,
-//             "type":"web"
-//             },
-//              {
-//             headers: {
-//               authorization: "Bearer " + localStorage.getItem("token"),
-//             },
-//           })
-//           .then(res => {
-//             console.log(res)
-//          if(res.status===204){
-//             console.log("Request Succesful and token is ", token)
-//         }
-//       })
-//       .catch(res => {
-//         console.log(res)
-//       })
-//   })
-// .catch(function(err){
-//   alert(err);
-// })
-// messaging.onMessage((payload) => {
-//   console.log('Message received. ', payload);
-// });
-
-firebase.messaging().onMessage(function(payload) {
-  console.log("got message")
-  const notificationTitle = "Notification!! ";
-  const notificationOptions = {
-      body: payload.data.alert,
-      icon: payload.notification.icon, 
-  };
-  if (!("Notification" in window)) {
-    console.log("This browser does not support system notifications");
-}
-// Let's check whether notification permissions have already been granted
-//else if (Notification.permission === "granted") {
-  else {
-    // If it's okay let's create a notification
-    var notification = new Notification(notificationTitle,notificationOptions);
-    notification.onClick = function(event) {
-       // event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        // window.open(payload.notification.click_action , '_blank');
-        notification.close();
-    }
-}
+messaging.onMessage((payload) => {
+ console.log('Message received. ', payload);
 });
-
-
-
 
 
 const rootReducer = combineReducers({
@@ -198,10 +116,13 @@ serviceWorker.unregister();
         const targetDot=e.target.closest('li');
         
        if(!targetDot) return;
+
        const currentSlide =track.querySelector('.active');
       // const currentDot=dotNav.querySelector('.active');
        const targetIndex=dots.findIndex(dot => dot===targetDot);
+
        const targetSlide=imgs[targetIndex];
+
        moveToslide(track,currentSlide,targetSlide);
   }
   dotNav.addEventListener('onchange',changeImg);

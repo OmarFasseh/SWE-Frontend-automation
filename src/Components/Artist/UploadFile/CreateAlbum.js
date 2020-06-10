@@ -16,7 +16,9 @@ const CreateAlbum = (props) => {
   const url = useContext(ConfigContext);
   const user = useContext(ProfileContext);
   console.log(props);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   /**Album name
    * @memberof CreateAlbum
    * @constant albumName
@@ -126,13 +128,14 @@ const CreateAlbum = (props) => {
     if(props.location.state.myAlbum){
       console.log("edit album:",props.location.state.myId)
       try {
-        const res = await axios.put(url.baseURL + "/me/albums/"+props.location.state.myId, formData, {
+        const res = await axios.patch(url.baseURL + "/me/albums/"+props.location.state.myId, formData, {
           headers: {
             authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
        if(res.status===200){
          setMessage("Album edited");
+         window.location.replace("/artist");
        }
       } catch (err) {
         console.log(err);
@@ -148,6 +151,7 @@ const CreateAlbum = (props) => {
         });
         if(res.status===200){
         setMessage("Album created");
+        window.location.replace("/artist");
       }
       } catch (err) {
         console.log(err);
@@ -161,8 +165,10 @@ const CreateAlbum = (props) => {
           authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
+      console.log(res);
       if(res.status===200){
       setMessage("Album deleted");
+      window.location.replace("/artist");
       }
     } catch (err) {
       console.log(err);
@@ -171,9 +177,10 @@ const CreateAlbum = (props) => {
   return (
     <div className="artist-body">
       <div className="full-page container upload-page">
-        <Fragment>
+        <Fragment >
+          <div className="row container">
           <ArtistSidebar/>
-          <form className="container" onSubmit={onSubmit}>
+          <form className="container inputs-container" onSubmit={onSubmit}>
             {message ? <Message msg={message} /> : null}
             <div class="form-group">
               <input
@@ -232,6 +239,7 @@ const CreateAlbum = (props) => {
             Delete Album
            </button> :null }
           </form>
+          </div>
         </Fragment>
       </div>
     </div>

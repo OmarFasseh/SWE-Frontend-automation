@@ -75,7 +75,6 @@ class MyPlaylists extends Component {
     }
 
     render() {
-        
         return (
         <div id="playlist-list-item">
            
