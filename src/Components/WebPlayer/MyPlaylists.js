@@ -75,7 +75,6 @@ class MyPlaylists extends Component {
     }
 
     render() {
-        this.setState({playlists:this.playlists})
         return (
         <div id="playlist-list-item">
            

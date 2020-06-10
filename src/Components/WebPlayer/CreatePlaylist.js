@@ -58,7 +58,7 @@ class CreatePlaylist extends Component {
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();  
                     })
-                  
+                  window.location.reload()
                    
                 }
               
