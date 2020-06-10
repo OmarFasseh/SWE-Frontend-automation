@@ -81,7 +81,7 @@ messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8
 // Callback fired if Instance ID token is updated.
 
 messaging.onTokenRefresh(() => {
-    messaging.getToken().then((refreshedToken) => {
+    messaging.getToken().then((token) => {
       console.log('Token refreshed.');
       updateUIForPushEnabled(token);
       sendSubscriptionToServer(token);
