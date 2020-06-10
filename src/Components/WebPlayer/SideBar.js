@@ -9,7 +9,8 @@ import  { Component } from "react";
 /** Class of SideBar in WebPlayer componenets
  * @extends Component
  */
-const SideBar = () => {  {
+class SideBar extends Component {
+    render()  {
     /**Logged in or not
      * @memberof SideBar
      * @type {boolean}
