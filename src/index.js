@@ -4,6 +4,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
 import axios from 'axios'
+import {ConfigContext} from './Context/ConfigContext'
 import {Provider} from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import authReducer from './ReduxStore/Reducers/Auth';
@@ -60,7 +61,6 @@ messaging.requestPermission()
 })
 messaging.onMessage((payload) => {
  console.log('Message received. ', payload);
-
 });
 
 
@@ -116,13 +116,10 @@ serviceWorker.unregister();
         const targetDot=e.target.closest('li');
         
        if(!targetDot) return;
-
        const currentSlide =track.querySelector('.active');
       // const currentDot=dotNav.querySelector('.active');
        const targetIndex=dots.findIndex(dot => dot===targetDot);
-
        const targetSlide=imgs[targetIndex];
-
        moveToslide(track,currentSlide,targetSlide);
   }
   dotNav.addEventListener('onchange',changeImg);

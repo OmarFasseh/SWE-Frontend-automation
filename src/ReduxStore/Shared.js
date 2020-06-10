@@ -1,6 +1,4 @@
 import Axios from "axios";
-import * as firebase from 'firebase';
-
 
 /**
      * A utiliy function toto change state of current component.
@@ -65,12 +63,7 @@ export const logout= () => {
     }
     localStorage.clear();
 
-    const messaging = firebase.messaging();
-    let token=messaging.getToken()
-    messaging.deleteToken(token)
-    .then((res) => {
-        console.log(res);
-    })
+   
 }
 
 /**
