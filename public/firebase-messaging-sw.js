@@ -1,3 +1,5 @@
+importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js');
 /* importScripts('https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/7.14.4/firebase-messaging.js');
 firebase.initializeApp({
@@ -56,8 +58,7 @@ if ('serviceWorker' in navigator) {
 
 ////////////////////////////////
   
-importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js');
+
 
 
 firebase.initializeApp({
@@ -86,23 +87,25 @@ messaging.onTokenRefresh(() => {
      // updateUIForPushEnabled(token);
       //sendSubscriptionToServer(token);
       // Indicate that the new Instance ID token has not yet been sent to the
-      try {
-        const res = axios.put(this.context.baseURL + "me/notifications/token",
-        {
-          "token":token
-          },
-           {
-          headers: {
-            authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        });
-       if(res.status===204){
-          console.log("Request Succesful and token is ", token)
-      }
-      } 
-      catch (err) {
-        console.log(err);
-      }
+      axios.put("https://totallynotspotify.codes/api/me/notifications/token",
+      {
+        "token":token,
+        "type":"web"
+        },
+         {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then(res => {
+        console.log(res)
+     if(res.status===204){
+        console.log("Request Succesful and token is ", token)
+    }
+  })
+  .catch(res => {
+    console.log(res)
+  })
       // ...
     }).catch((err) => {
       console.log('Unable to retrieve refreshed token ', err);
