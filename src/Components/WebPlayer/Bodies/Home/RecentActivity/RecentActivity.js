@@ -75,7 +75,7 @@ componentDidMount(){
                          * link to image of the notification item
                          * @type {link}
                          */
-                     image:recents.data.images[0]
+                     image:recents.data.images
                     })),
                    totalResults: res.data.data.results.total,
                    Loaded:true,
