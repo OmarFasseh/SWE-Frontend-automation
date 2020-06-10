@@ -1,11 +1,5 @@
 import Axios from "axios";
 
-/**
-     * A utiliy function toto change state of current component.
-     * @function updateObject
-     * @param {oldObject} - old state object.
-     * @param {updatedProperties} - new state object.
-     */
 export const updateObject = (oldObject, updatedProperties) => {
     return {
         ...oldObject,
@@ -50,10 +44,6 @@ export const checkValidity = ( value, type ) => {
     return isValid;
 }
 
-/**
-     * A utiliy function to allow global log out
-     * @function logout
-     */
 export const logout= () => {
     if(localStorage.getItem("loginType")==="fb")
     {
@@ -64,10 +54,6 @@ export const logout= () => {
     localStorage.clear();
 }
 
-/**
-     * A utiliy function to allow global login
-     * @function logout
-     */
 export const login= (type,token) => {
     
     localStorage.setItem("isLoggedIn",'true');
@@ -77,11 +63,6 @@ export const login= (type,token) => {
     //Axios.defaults.header.common['authorization'] = "Bearer "+ token;
 }
 
-/**
-     * A utiliy to allow global response handeling form all components.
-     * @function responseHandler
-     * @param {response} - response retrieved.
-     */
 export const responseHandler= (response) => {
 
     if(response.status===401)

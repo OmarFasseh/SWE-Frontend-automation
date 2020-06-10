@@ -27,13 +27,7 @@ import './AddToPlaylist.css'
             * @extends MyPlaylists
             * @type {string}
             */
-            trackid:"",
-            /** Track Id 
-            * @extends MyPlaylists
-            * @type {bool}
-            */
-           loaded:false
-
+            trackid:""
         }
         this.handleClick= this.handleClick.bind(this)
     }
@@ -74,15 +68,12 @@ import './AddToPlaylist.css'
                           * 
                           */
                       imageUrl:playlists.images[0]
-                  })),
-                  loaded:true,
+                  }))
               }) } else 
               responseHandler(res);
           }).catch(res=>{
               console.log(res);
-              alert(res.response.data.message);
             }) 
-            
     }
 
        /**
@@ -112,10 +103,9 @@ import './AddToPlaylist.css'
                 )
             }
         })
-        .catch(res=>{
-            console.log(res);
-            alert(res.response.data.message);
-          }) 
+        .catch(error => {
+            console.log(error);
+        })
     }
 
 render() {
@@ -140,8 +130,7 @@ render() {
        
       <div className="modal-body" id="modal-body-share">
       <div className="row" >
-              {this.state.loaded? 
-                <div className="playlist-items-wrapper">
+                     <div className="playlist-items-wrapper">
                      {this.state.playlists.map(playlist => (
                                         <div className="playlist-item-wrapper"  id={playlist.id}  >
                                             <div className="playlist-index-img-background"  onClick={() => this.handleClick(playlist.id)}>
@@ -158,8 +147,9 @@ render() {
                                                     </div>
                                                 </div> 
                                             </div>
-                                        </div>)) }</div>:<div></div>  }  
+                                        </div>   ))}
 
+                 </div>
                  </div>
 
         

@@ -1,4 +1,4 @@
-/* importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js');
 
 
@@ -50,7 +50,7 @@ messaging.onTokenRefresh(() => {
       console.log('Unable to retrieve refreshed token ', err);
       showToken('Unable to retrieve refreshed token ', err);
     });
-  }); */
+  });
 
 /* self.addEventListener('notificationclick', (event) => {
     if (event.action) {
@@ -84,13 +84,13 @@ messaging.onTokenRefresh(() => {
 //         });
 //     });
 // }
-/* self.addEventListener('push', async function(event) {
+self.addEventListener('push', async function(event) {
   event.waitUntil(
       self.registration.showNotification('title', {
         body: 'body'
       })
   );
-}); */
+});
 // self.addEventListener('notificationclick', function(event) {
 //   console.log('[firebase-messaging-sw.js] Received notificationclick event ', event);
   
@@ -111,7 +111,7 @@ messaging.onTokenRefresh(() => {
 //       }));
   
 //   });
-/*   const showMessage = function(payload){
+  const showMessage = function(payload){
       console.log('showMessage', payload);
       const notificationTitle = payload.data.title;
       const notificationOptions = {
@@ -130,4 +130,4 @@ messaging.onTokenRefresh(() => {
   self.addEventListener('message', function (evt) {     
     console.log("self",self);
     showMessage( evt.data );
-  }) */
+  })

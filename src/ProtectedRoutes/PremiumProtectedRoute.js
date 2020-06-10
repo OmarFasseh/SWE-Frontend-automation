@@ -1,10 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-/**
-     * Protected route to allow only premium user.
-     * @extends Component
-     */
 export const PremiumProtectedRoute = ({
   component: Component,
   ...rest

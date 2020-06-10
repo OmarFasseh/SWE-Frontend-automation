@@ -27,7 +27,7 @@
     "mocha": "^7.1.1",
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0",
-    "react-bootstrap-range-slider": "^0.3.8",
+    "react-bootstrap-range-slider": "^0.3.5",
     "react-chartjs-2": "^2.9.0",
     "react-contexify": "^4.1.1",
     "react-contextify": "^0.1.0",

@@ -82,7 +82,7 @@ export class AlbumWebPlayer extends Component {
          * @memberof AlbumWebPlayer
          * @type {Number}
          */
-        "playing_song_number":0,
+        "playing_song_number":Number,
         /**
          * Name of the playing song
          * @memberof AlbumWebPlayer
@@ -148,14 +148,14 @@ export class AlbumWebPlayer extends Component {
          * @memberof AlbumWebPlayer
          * @type {Boolean}
          */
-        "is_playing":false,
-        "pageLoaded": false
+        "is_playing":false
     }
 
     componentDidMount(){
         window.scrollTo(0, 0);
         const{myId}=this.props.location.state;//getting id from parent component
         this.state.myId=myId;
+        console.log(this.state.myId)
         this.getAlbumDetails();
         this.getAlbumTracks();
 
@@ -169,9 +169,10 @@ export class AlbumWebPlayer extends Component {
     * @memberof AlbumWebPlayer
     */
     getAlbumDetails(){
-        
-        //var link = this.context.baseURL+"/albums/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
-        axios.get("https://spotify.mocklab.io/albums/12345",{
+        //this.context.baseURL+"/albums/"+this.state.myId
+        //"http://spotify.mocklab.io/albums/12345"
+        var link = this.context.baseURL+"/albums/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345");
+        axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -200,8 +201,7 @@ export class AlbumWebPlayer extends Component {
         })
 
         //check if album is liked
-        //this.context.baseURL+"/me/likedAlbums"
-        axios.get("https://spotify.mocklab.io/me/likedAlbums",{
+        axios.get(this.context.baseURL+"/me/likedAlbums",{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token")
@@ -230,9 +230,10 @@ export class AlbumWebPlayer extends Component {
     * @memberof AlbumWebPlayer
     */
     getAlbumTracks(){
-        
-        //var link = this.context.baseURL+"/albums/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
-        axios.get("https://spotify.mocklab.io/albums/12345/tracks",{
+        //this.context.baseURL+"/albums/"+this.state.myId+"/tracks"
+        //"http://spotify.mocklab.io/albums/12345/tracks"
+        var link = this.context.baseURL+"/albums/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
+        axios.get(link,{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
@@ -241,13 +242,9 @@ export class AlbumWebPlayer extends Component {
         })
         .then(res => {
             if(res.status===200){
-                this.setState({
-                    tracks:res.data.data.tracksArray,
-                    pageLoaded:true
-                })
+                this.setState({tracks:res.data.data.tracksArray})
                 console.log("tracks");
                 console.log(res);
-
             }
             else responseHandler(res);
         })
@@ -256,8 +253,7 @@ export class AlbumWebPlayer extends Component {
         })
 
         //gets array of liked tracks' ids
-        //this.context.baseURL+"/me/likedTracks"
-        axios.get("https://spotify.mocklab.io/me/likedTracks",{
+        axios.get(this.context.baseURL+"/me/likedTracks",{
             headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token")
@@ -284,7 +280,7 @@ export class AlbumWebPlayer extends Component {
      */
     likeButtonPressed=()=>{
         if(!this.state.is_liked){
-            axios.put("https://spotify.mocklab.io/me/likeAlbum",{"id":this.state.myId},{
+            axios.put(this.context.baseURL+"/me/likeAlbum",{"id":this.state.myId},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
@@ -302,7 +298,7 @@ export class AlbumWebPlayer extends Component {
             })
         }
         else{
-            axios.delete("https://spotify.mocklab.io/me/unlikeAlbum",{
+            axios.delete(this.context.baseURL+"/me/unlikeAlbum",{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 },
@@ -330,7 +326,7 @@ export class AlbumWebPlayer extends Component {
      */
     trackLikeButtonPressed=()=>{
         if(!this.state.playing_song_is_liked && this.state.playing_song_id !== ""){
-            axios.put("https://spotify.mocklab.io/me/likeTrack",{"id":this.state.playing_song_id},{
+            axios.put(this.context.baseURL+"/me/likeTrack",{"id":this.state.playing_song_id},{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 }
@@ -350,7 +346,7 @@ export class AlbumWebPlayer extends Component {
             })
         }
         else if(this.state.playing_song_id !== ""){
-            axios.delete("https://spotify.mocklab.io/me/unlikeTrack",{
+            axios.delete(this.context.baseURL+"/me/unlikeTrack",{
                 headers:{
                     'authorization': "Bearer "+ localStorage.getItem("token"),
                 },
@@ -590,7 +586,7 @@ export class AlbumWebPlayer extends Component {
      * @return {void}
      */
     PlayPauseButtonPressed=()=>{
-        if(this.state.playing_song_name !== ""){
+        if(this.audio.src !== ""){
             if(this.state.is_playing){
                 this.setState({
                     pausedtime:this.audio.currentTime,
@@ -605,12 +601,6 @@ export class AlbumWebPlayer extends Component {
                 this.audio.play();
                 this.audio.currentTime=this.state.pausedtime;
             }
-        }
-        else{
-            this.setState({
-                playing_song_number:0
-            })
-            this.nextSong();
         }
     }
 
@@ -671,8 +661,7 @@ export class AlbumWebPlayer extends Component {
                     <div className="col-lg-10">
                         <HomeNavBar/>
                         <div id="album-webplayer-main-div">
-                            {this.state.pageLoaded ? 
-                            <div className="row">
+                           <div className="row">
                                 <div className="row album-details-div">
                                     <div className="album-image-div">
                                         <img className="album-image" src={this.state.album_image} alt="album pic"/>
@@ -720,12 +709,6 @@ export class AlbumWebPlayer extends Component {
                                     <TracksList tracks={this.state.tracks} is_playing={this.state.is_playing} playing_song_id={this.state.playing_song_id} setPlayingSondId={this.setPlayingSondId} albumId={this.props.location.state.myId} myAlbumArtist={this.props.location.state.myAlbum} />
                                 </div>
                             </div> 
-                            : 
-                            <div className="container w-50 pb-5 align-middle align-self-center d-flex justify-content-center">
-                                <div class="spinner-border text-success" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>}
                         </div>
                     </div>
                 </div>
