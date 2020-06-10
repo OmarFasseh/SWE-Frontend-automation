@@ -60,8 +60,7 @@ messaging.requestPermission()
   console.log("error occured")
 })
 messaging.onMessage((payload) => {
-  console.log('Message received. ', payload);
-  // ...
+ console.log('Message received. ', payload);
 });
 
 

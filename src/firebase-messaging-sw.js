@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js');
 
 
 firebase.initializeApp({
@@ -52,12 +52,12 @@ messaging.onTokenRefresh(() => {
     });
   });
 
-/* self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', (event) => {
     if (event.action) {
         clients.openWindow(event.action);
     }
     event.notification.close();
-});  */
+});  
 
 // register service worker & handle push events
 // if ('serviceWorker' in navigator) {
@@ -90,7 +90,7 @@ self.addEventListener('push', async function(event) {
         body: 'body'
       })
   );
-});
+}); 
 // self.addEventListener('notificationclick', function(event) {
 //   console.log('[firebase-messaging-sw.js] Received notificationclick event ', event);
   
@@ -113,13 +113,13 @@ self.addEventListener('push', async function(event) {
 //   });
   const showMessage = function(payload){
       console.log('showMessage', payload);
-      const notificationTitle = payload.data.title;
+      const notificationTitle = payload.notification.title;
       const notificationOptions = {
-          body: payload.data.body,
-          icon: payload.data.icon,
-          image: payload.data.image,
-          click_action: payload.data.click_action,
-          data:payload.data.click_action
+          body: payload.notification.body,
+          //icon: payload.data.icon,
+          image: payload.data.images,
+          //click_action: payload.data.click_action,
+          //data:payload.data.click_action
       };  
   
   
@@ -127,7 +127,7 @@ self.addEventListener('push', async function(event) {
   }   
   messaging.setBackgroundMessageHandler(showMessage);
   messaging.onMessage(showMessage);
-  self.addEventListener('message', function (evt) {     
-    console.log("self",self);
-    showMessage( evt.data );
-  })
+  //self.addEventListener('message', function (evt) {     
+    //console.log("self",self);
+    //howMessage( evt.data );
+  //})
