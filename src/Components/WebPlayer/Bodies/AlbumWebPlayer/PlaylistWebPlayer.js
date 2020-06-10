@@ -231,9 +231,12 @@ export class PlaylistWebPlayer extends Component {
     * @memberof PlaylistWebPlayer
     */
     getPlaylistTracks(){
+     var link = this.context.baseURL+"/playlists/" + this.state.myId+"/tracks";
+
         //var link = this.context.baseURL+"/playlists/"+(this.context.baseURL === "https://totallynotspotify.codes/api"? this.state.myId:"12345")+"/tracks";
-        axios.get("https://spotify.mocklab.io/playlists/12345/tracks",{
-            headers:{
+      //  axios.get("https://spotify.mocklab.io/playlists/12345/tracks",{
+        axios.get(link,{   
+      headers:{
                 'Content-Type':'application/json',
                 'authorization': "Bearer "+ localStorage.getItem("token"),
                 "id": this.state.myId
