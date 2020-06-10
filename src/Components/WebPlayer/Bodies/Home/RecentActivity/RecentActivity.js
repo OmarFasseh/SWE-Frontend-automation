@@ -8,17 +8,17 @@ import './RecentActivity.css'
 
 import * as firebase from 'firebase';
 
-  var config = {
-  apiKey: "AIzaSyDstl21Iann4t-odVPIMFTXpI5ToD1jIC0",
-  authDomain: "totally-not-spotify.firebaseapp.com",
-  databaseURL: "https://totally-not-spotify.firebaseio.com",
-  projectId: "totally-not-spotify",
-  storageBucket: "totally-not-spotify.appspot.com",
-  messagingSenderId: "262598048193",
-  appId: "1:262598048193:web:8eb027331acfe77f625740",
-  measurementId: "G-YDVW3R60NT"
-};
-firebase.initializeApp(config);
+//   var config = {
+//   apiKey: "AIzaSyDstl21Iann4t-odVPIMFTXpI5ToD1jIC0",
+//   authDomain: "totally-not-spotify.firebaseapp.com",
+//   databaseURL: "https://totally-not-spotify.firebaseio.com",
+//   projectId: "totally-not-spotify",
+//   storageBucket: "totally-not-spotify.appspot.com",
+//   messagingSenderId: "262598048193",
+//   appId: "1:262598048193:web:8eb027331acfe77f625740",
+//   measurementId: "G-YDVW3R60NT"
+// };
+// firebase.initializeApp(config);
 
 
 /**
