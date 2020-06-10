@@ -81,10 +81,10 @@ messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8
 // Callback fired if Instance ID token is updated.
 
 messaging.onTokenRefresh(() => {
-    messaging.getToken().then((refreshedToken) => {
+    messaging.getToken().then((token) => {
       console.log('Token refreshed.');
-      updateUIForPushEnabled(token);
-      sendSubscriptionToServer(token);
+     // updateUIForPushEnabled(token);
+      //sendSubscriptionToServer(token);
       // Indicate that the new Instance ID token has not yet been sent to the
       try {
         const res = axios.put(this.context.baseURL + "me/notifications/token",
