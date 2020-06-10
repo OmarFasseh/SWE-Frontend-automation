@@ -19,8 +19,8 @@ import {
   } from 'react-share';
 
 function Share(props) {
-  let URL=(props.url);
-  //let URL=(props.url).replace('/api','');
+ // let URL=(props.url);
+  let URL=(props.url).replace('/api','');
   //console.log(window.location.href);
   //console.log(URL);
     return(<div>
