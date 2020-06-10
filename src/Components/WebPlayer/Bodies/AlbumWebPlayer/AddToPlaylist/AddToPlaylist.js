@@ -82,6 +82,7 @@ import './AddToPlaylist.css'
               console.log(res);
               alert(res.response.data.message);
             }) 
+            
     }
 
        /**
@@ -111,9 +112,10 @@ import './AddToPlaylist.css'
                 )
             }
         })
-        .catch(error => {
-            console.log(error);
-        })
+        .catch(res=>{
+            console.log(res);
+            alert(res.response.data.message);
+          }) 
     }
 
 render() {
