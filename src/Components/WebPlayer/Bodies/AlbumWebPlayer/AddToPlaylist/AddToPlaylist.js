@@ -27,7 +27,13 @@ import './AddToPlaylist.css'
             * @extends MyPlaylists
             * @type {string}
             */
-            trackid:""
+            trackid:"",
+            /** Track Id 
+            * @extends MyPlaylists
+            * @type {bool}
+            */
+           loaded:false
+
         }
         this.handleClick= this.handleClick.bind(this)
     }
@@ -68,7 +74,8 @@ import './AddToPlaylist.css'
                           * 
                           */
                       imageUrl:playlists.images[0]
-                  }))
+                  })),
+                  loaded:true,
               }) } else 
               responseHandler(res);
           }).catch(res=>{
@@ -131,7 +138,8 @@ render() {
        
       <div className="modal-body" id="modal-body-share">
       <div className="row" >
-                     <div className="playlist-items-wrapper">
+              {this.state.loaded? 
+                <div className="playlist-items-wrapper">
                      {this.state.playlists.map(playlist => (
                                         <div className="playlist-item-wrapper"  id={playlist.id}  >
                                             <div className="playlist-index-img-background"  onClick={() => this.handleClick(playlist.id)}>
@@ -148,9 +156,8 @@ render() {
                                                     </div>
                                                 </div> 
                                             </div>
-                                        </div>   ))}
+                                        </div>)) }</div>:<div></div>  }  
 
-                 </div>
                  </div>
 
         
