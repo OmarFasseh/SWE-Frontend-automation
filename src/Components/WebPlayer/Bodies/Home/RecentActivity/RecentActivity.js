@@ -6,6 +6,21 @@ import Pagination from "./Pagination"
 import './RecentActivity.css'
 
 
+import * as firebase from 'firebase';
+
+  var config = {
+  apiKey: "AIzaSyDstl21Iann4t-odVPIMFTXpI5ToD1jIC0",
+  authDomain: "totally-not-spotify.firebaseapp.com",
+  databaseURL: "https://totally-not-spotify.firebaseio.com",
+  projectId: "totally-not-spotify",
+  storageBucket: "totally-not-spotify.appspot.com",
+  messagingSenderId: "262598048193",
+  appId: "1:262598048193:web:8eb027331acfe77f625740",
+  measurementId: "G-YDVW3R60NT"
+};
+firebase.initializeApp(config);
+
+
 /**
  * Recent Activity : shows the recent activity of the user that  is the history of notifications
  * @extends Component
@@ -46,7 +61,46 @@ constructor(){
    * 
    */
 componentDidMount(){
-  
+    const messaging = firebase.messaging();
+// Add the public key generated from the console here.
+messaging.usePublicVapidKey("BKWMGFcg3yIaZ8ONAeIORVydRfg1GFtMnKcCPV-jFyEXWAlbLv8nv9Wtsr4Gu5NsVHZTFl4yD0ZXcZpqsBvrIj8");
+if (Notification.permission !== "granted")
+{
+messaging.requestPermission()
+  .then (function(){
+    console.log("Have permission");
+    return messaging.getToken();
+  })
+  .then(function(token){
+  console.log("token is "); 
+  console.log(token);
+         axios.put("https://totallynotspotify.codes/api/me/notifications/token",
+          {
+            "token":token,
+            "type":"web"
+            },
+             {
+            headers: {
+              authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then(res => {
+            console.log(res)
+         if(res.status===204){
+            console.log("Request Succesful and token is ", token)
+        }
+      })
+      .catch(res => {
+        console.log(res)
+      })
+  })
+.catch(function(err){
+  console.log("error occured")
+})
+}
+messaging.onMessage((payload) => {
+ console.log('Message received. ', payload);
+});
 
     axios.get(this.context.baseURL +'/me/notifications?limit=4',
     {
