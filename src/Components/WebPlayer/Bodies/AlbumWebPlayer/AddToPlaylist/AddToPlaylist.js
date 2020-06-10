@@ -73,6 +73,7 @@ import './AddToPlaylist.css'
               responseHandler(res);
           }).catch(res=>{
               console.log(res);
+              alert(res.response.data.message);
             }) 
     }
 
