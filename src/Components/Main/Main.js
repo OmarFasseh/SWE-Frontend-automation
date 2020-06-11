@@ -21,7 +21,7 @@ function Main() {
               </div>
 
               <div className="h-4">Millions of songs. No credit card needed.</div>
-               <Link to="/signup"> <button id="ob"className="my-spotify-button" >Get Spotify Free</button></Link>
+               <Link to="/signup"> <button id="ob"className="my-spotify-button" >Get Spotify For Free</button></Link>
                
             </div>
          </section>     
